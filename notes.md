@@ -8,6 +8,6 @@
 
 ## Color Pallette
 
-### Light - Primary: #b2628b shades: #8e4e6f Text: #140b10, Background: #faf5f8, Secondary: #aad5af, Accent: #85c0c1
+### Light Mode: Text: #121921, Background: #e8edf3, Primary: #334761, Secondary: #9691c5, Accent: #6a54a0
 
-### Dark - Primary: #9d4d77, Text: #f4ebf0, Background: #0a0508, Secondary: #2a552f, Accent: #3e797a
+### Dark Mode: Text: #dee5ed, Background: #0c1117, Primary: #9eb2cc, Secondary: #3f3a6e, Accent: #745fab
