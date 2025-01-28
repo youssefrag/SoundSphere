@@ -16,19 +16,25 @@
         @click="toggleDark()"
       />
       <font-awesome-icon
+        v-if="!menuOpen"
         :icon="['fas', 'bars']"
         class="cursor-pointer text-4xl text-[#121921] dark:text-[#dee5ed] transition duration-300 ease-in-out hover:scale-125 hover:text-[#334761] dark:hover:text-[#9eb2cc]"
+        @click="toggleMenu()"
       />
       <font-awesome-icon
-        :icon="['fas', 'window-close']"
+        v-if="menuOpen"
+        :icon="['fas', 'x']"
         class="cursor-pointer text-4xl text-[#121921] dark:text-[#dee5ed] transition duration-300 ease-in-out hover:scale-125 hover:text-[#334761] dark:hover:text-[#9eb2cc]"
+        @click="toggleMenu()"
       />
     </div>
     <nav-menu
-      v-if="menuOpen"
-      class="sticky top-[10rem] right-[80px] float-right"
+      :class="{
+        'translate-none': menuOpen,
+        'transform translate-x-[140%] rotate-[30deg]': !menuOpen,
+      }"
+      class="sticky z-10 top-[10rem] right-[80px] float-right transform transition-all duration-500 ease-in-out"
     />
-    <!-- <h1 class="text-black dark:text-white sticky top-60 right-40 float-right"> -->
 
     <RouterView />
   </div>

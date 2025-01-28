@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-xl bg-[#6a54a0] dark:bg-[#745fab] bg-opacity-30 dark:bg-opacity-30 h-[25rem] w-[500px]"
+    class="rounded-xl bg-[#334761] dark:bg-[#9eb2cc] h-[25rem] w-[500px]"
   ></div>
 </template>
 

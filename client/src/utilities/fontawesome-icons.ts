@@ -8,18 +8,9 @@ import {
   faMoon,
   faBars,
   faSign,
-  faWindowClose,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(
-  faPhone,
-  faUser,
-  faFlag,
-  faSun,
-  faMoon,
-  faBars,
-  faSign,
-  faWindowClose
-);
+library.add(faPhone, faUser, faFlag, faSun, faMoon, faBars, faSign, faX);
 
 export default FontAwesomeIcon;
