@@ -1,36 +1,5 @@
-<template>
-  <main>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-    <h1>Example</h1>
-  </main>
-</template>
+<script setup></script>
 
-<script setup lang="ts"></script>
+<template>
+  <main></main>
+</template>
