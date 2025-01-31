@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "test:unit": "vitest"
+    "preview": "vite preview"
   },
   "dependencies": {
     "pinia": "^2.3.1",
@@ -16,10 +15,10 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/test-utils": "^2.4.6",
-    "jsdom": "^26.0.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.14",
     "vite": "^6.0.11",
-    "vite-plugin-vue-devtools": "^7.7.0",
-    "vitest": "^3.0.2"
+    "vite-plugin-vue-devtools": "^7.7.0"
   }
 }
