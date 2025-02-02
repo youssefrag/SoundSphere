@@ -1,15 +1,21 @@
 <template>
   <nav
-    class="absolute top-0 h-[100px] bg-[#0E0E0F] opacity-80 w-[100%] flex items-center justify-between px-20 border-b border-gray-100"
+    class="h-[100px] bg-[#0E0E0F] w-[100%] flex items-center justify-between px-20 border-b border-gray-100"
   >
     <div class="flex items-center gap-4">
       <img alt="logo" src="../assets/Vector.png" />
       <h1 class="text-3xl font-bold text-[#fff]">SoundSphere</h1>
     </div>
     <div class="flex items-center gap-8">
-      <a href="/" class="text-[#fff] hover:text-[#FF4D42]">HOME</a>
-      <a href="/" class="text-[#fff] hover:text-[#FF4D42]">BROWSE</a>
-      <a href="/" class="text-[#fff] hover:text-[#FF4D42]">PROFILE</a>
+      <a href="/" class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
+        >HOME</a
+      >
+      <a href="/" class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
+        >BROWSE</a
+      >
+      <a href="/" class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
+        >PROFILE</a
+      >
     </div>
     <div class="flex items-center gap-4">
       <div
