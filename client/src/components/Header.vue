@@ -25,6 +25,7 @@
       </div>
 
       <button
+        @click="modalStore.toggleModal"
         class="text-[#0E0E0F] text-sm py-2 px-8 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C]"
       >
         Login
@@ -35,11 +36,9 @@
 ☹️
 
 <script setup>
-import { ref } from "vue";
+import useModalStore from "@/stores/modal";
 
-const searchBarOpen = ref(false);
+let modalStore = useModalStore();
 
-const toggleSearchBar = () => {
-  searchBarOpen.value = !searchBarOpen.value;
-};
+console.log(modalStore.isOpen);
 </script>
