@@ -17,3 +17,29 @@
 #FFA900
 #FFFFFF
 #4636FF
+
+# Database Schema
+
+## User
+
+- UserID (primary key)
+- Name
+- Email
+- Password
+- Picture Link
+
+## Song
+
+- SongID (primary key)
+- UserID (foreign key)
+- Song link
+- Genre
+- Rating Overall
+
+## Comment
+
+- CommentID (primary key)
+- SongID (foreign key)
+- UserID (foreign key)
+- Content
+- Rating
