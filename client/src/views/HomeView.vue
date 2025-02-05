@@ -1,5 +1,5 @@
 <template>
-  <main
+  <section
     class="h-[44rem] bg-[url(@/assets/images/home-bg.jpeg)] bg-cover bg-top"
   >
     <section
@@ -27,7 +27,34 @@
         </button>
       </div>
     </section>
-  </main>
+  </section>
+  <section class="h-[757px] bg-[#0E0E0F] py-[6rem]">
+    <div class="text-[#fff] text-center text-5xl mb-[4rem] font-semibold">
+      Trending & Latest Music
+    </div>
+    <div class="flex items-center h-[30rem] px-10 gap-8">
+      <font-awesome-icon
+        :icon="['fas', 'arrow-left']"
+        class="text-[#fff] text-4xl"
+      />
+      <div class="flex-1 w-[100%] flex gap-5 overflow-y-auto">
+        <div v-for="(artist, index) in music" :key="index">
+          <artist-card :artist="artist" :index="index" />
+        </div>
+      </div>
+      <font-awesome-icon
+        :icon="['fas', 'arrow-right']"
+        class="text-[#fff] text-4xl"
+      />
+    </div>
+  </section>
 </template>
 
-<script setup></script>
+<script setup>
+import useMusicStore from "@/stores/music";
+import ArtistCard from "@/components/ArtistCard.vue";
+
+let { music } = useMusicStore();
+
+console.log(music);
+</script>

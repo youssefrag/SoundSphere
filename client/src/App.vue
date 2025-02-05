@@ -12,6 +12,4 @@ import Auth from "@/components/Auth.vue";
 import useModalStore from "@/stores/modal";
 
 const modalStore = useModalStore();
-
-console.log(modalStore.isOpen);
 </script>

@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="h-[100px] bg-[#0E0E0F] w-[100%] flex items-center justify-between px-20 border-b border-gray-100"
+    class="sticky top-0 z-50 h-[100px] bg-[#0E0E0F] w-[100%] flex items-center justify-between px-20 border-b border-gray-100"
   >
     <div class="flex items-center gap-4">
       <img alt="logo" src="../assets/Vector.png" />
@@ -39,6 +39,4 @@
 import useModalStore from "@/stores/modal";
 
 let modalStore = useModalStore();
-
-console.log(modalStore.isOpen);
 </script>

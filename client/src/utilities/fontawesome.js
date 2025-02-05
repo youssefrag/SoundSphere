@@ -5,8 +5,10 @@ import {
   faUser,
   faX,
   faUpload,
+  faArrowLeft,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faSearch, faUser, faX, faUpload);
+library.add(faSearch, faUser, faX, faUpload, faArrowLeft, faArrowRight);
 
 export default FontAwesomeIcon;

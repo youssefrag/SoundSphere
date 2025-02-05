@@ -6,10 +6,7 @@ export default defineStore("modal", {
   }),
   actions: {
     toggleModal() {
-      console.log("reached here");
-      console.log(this.isOpen);
       this.isOpen = !this.isOpen;
-      console.log(this.isOpen);
     },
   },
 });
