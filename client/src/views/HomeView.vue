@@ -35,16 +35,20 @@
     <div class="flex items-center h-[30rem] px-10 gap-8">
       <font-awesome-icon
         :icon="['fas', 'arrow-left']"
-        class="text-[#fff] text-4xl"
+        class="text-[#FFA900] text-4xl"
       />
-      <div class="flex-1 w-[100%] flex gap-5 overflow-y-auto">
+
+      <div
+        class="flex-1 w-[100%] flex gap-5 overflow-y-auto"
+        style="scrollbar-color: #fff"
+      >
         <div v-for="(artist, index) in music" :key="index">
           <artist-card :artist="artist" :index="index" />
         </div>
       </div>
       <font-awesome-icon
         :icon="['fas', 'arrow-right']"
-        class="text-[#fff] text-4xl"
+        class="text-[#FFA900] text-4xl"
       />
     </div>
   </section>
