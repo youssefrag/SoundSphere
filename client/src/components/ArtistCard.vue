@@ -27,7 +27,11 @@
         :key="index"
         class="py-5 flex justify-between items-center"
       >
-        <div class="text-white font-bold">{{ song.name }}</div>
+        <router-link
+          :to="{ name: 'song', params: { id: song.id } }"
+          class="text-white font-bold"
+          >{{ song.name }}</router-link
+        >
         <div class="flex items-center gap-3">
           <div class="text-white font-bold">{{ song.duration }}</div>
 
