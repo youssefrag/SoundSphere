@@ -7,8 +7,20 @@ import {
   faUpload,
   faArrowLeft,
   faArrowRight,
+  faPlay,
+  faList,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faSearch, faUser, faX, faUpload, faArrowLeft, faArrowRight);
+library.add(
+  faSearch,
+  faUser,
+  faX,
+  faUpload,
+  faArrowLeft,
+  faArrowRight,
+  faPlay,
+  faComment
+);
 
 export default FontAwesomeIcon;

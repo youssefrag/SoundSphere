@@ -59,6 +59,4 @@ import useMusicStore from "@/stores/music";
 import ArtistCard from "@/components/ArtistCard.vue";
 
 let { music } = useMusicStore();
-
-console.log(music);
 </script>
