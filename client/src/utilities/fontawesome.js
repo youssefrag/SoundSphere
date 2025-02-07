@@ -8,8 +8,9 @@ import {
   faArrowLeft,
   faArrowRight,
   faPlay,
-  faList,
   faComment,
+  faMusic,
+  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -20,7 +21,9 @@ library.add(
   faArrowLeft,
   faArrowRight,
   faPlay,
-  faComment
+  faComment,
+  faMusic,
+  faCalendar
 );
 
 export default FontAwesomeIcon;
