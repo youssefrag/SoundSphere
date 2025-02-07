@@ -36,12 +36,10 @@
       <font-awesome-icon
         :icon="['fas', 'arrow-left']"
         class="text-[#FFA900] text-4xl"
+        @click="scrollLeft"
       />
 
-      <div
-        class="flex-1 w-[100%] flex gap-5 overflow-y-auto"
-        style="scrollbar-color: #fff"
-      >
+      <div class="flex-1 w-[100%] flex gap-5 overflow-y-auto" ref="carousel">
         <div v-for="(artist, index) in music" :key="index">
           <artist-card :artist="artist" :index="index" />
         </div>
@@ -49,14 +47,29 @@
       <font-awesome-icon
         :icon="['fas', 'arrow-right']"
         class="text-[#FFA900] text-4xl"
+        @click="scrollRight"
       />
     </div>
   </section>
 </template>
 
 <script setup>
+import { useTemplateRef } from "vue";
+
 import useMusicStore from "@/stores/music";
 import ArtistCard from "@/components/ArtistCard.vue";
 
 let { music } = useMusicStore();
+
+const carousel = useTemplateRef("carousel");
+console.log(carousel);
+
+const scrollLeft = () => {
+  const itemWidth = 10;
+  carousel.scrollLeft = carousel.scrollLeft - itemWidth;
+};
+const scrollRight = () => {
+  const itemWidth = 10;
+  carousel.scrollLeft = carousel.scrollLeft + itemWidth;
+};
 </script>

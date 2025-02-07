@@ -60,8 +60,5 @@
 
 <script setup>
 const { artist, index } = defineProps(["index", "artist"]);
-
 const { songs } = artist;
-
-console.log(songs);
 </script>
