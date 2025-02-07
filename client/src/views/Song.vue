@@ -3,10 +3,10 @@
     class="flex items-end justify-between w-[100%] h-[400px] absolute top-[100px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] px-[40px] py-[40px]"
   >
     <div class="flex items-end gap-6">
-      <div
-        :class="bgClass"
+      <v-lazy-image
+        :src="song.imageUrl"
         class="h-[320px] w-[320px] bg-cover bg-center rounded-xl"
-      ></div>
+      />
       <div class="flex flex-col gap-4">
         <div class="text-[#0DE27C] font-bold">{{ song.artist }}</div>
         <div class="text-[#fff] font-extrabold text-4xl">{{ song.name }}</div>
@@ -52,6 +52,8 @@
 </template>
 
 <script setup>
+import VLazyImage from "v-lazy-image";
+
 const song = {
   name: "Midnight Drive",
   artist: "Alex Waves",
@@ -60,6 +62,4 @@ const song = {
     "https://plus.unsplash.com/premium_photo-1720188548716-9de4d2911fff?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   date: "29-01-2025",
 };
-
-const bgClass = `bg-[url(${song.imageUrl})]`;
 </script>
