@@ -39,7 +39,10 @@
         @click="scrollLeft"
       />
 
-      <div class="flex-1 w-[100%] flex gap-5 overflow-y-auto" ref="carousel">
+      <div
+        class="flex-1 w-[100%] flex gap-5 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#0E0E0F] [&::-webkit-scrollbar-thumb]:bg-[#4636FF] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
+        ref="carousel"
+      >
         <div v-for="(artist, index) in music" :key="index">
           <artist-card :artist="artist" :index="index" />
         </div>
@@ -54,6 +57,7 @@
 </template>
 
 <script setup>
+import { useScroll } from "@vueuse/core";
 import { useTemplateRef } from "vue";
 
 import useMusicStore from "@/stores/music";
@@ -62,14 +66,13 @@ import ArtistCard from "@/components/ArtistCard.vue";
 let { music } = useMusicStore();
 
 const carousel = useTemplateRef("carousel");
-console.log(carousel);
+let { x, y } = useScroll(carousel, { behavior: "smooth" });
+
+const scrollRight = () => {
+  x.value += 400;
+};
 
 const scrollLeft = () => {
-  const itemWidth = 10;
-  carousel.scrollLeft = carousel.scrollLeft - itemWidth;
-};
-const scrollRight = () => {
-  const itemWidth = 10;
-  carousel.scrollLeft = carousel.scrollLeft + itemWidth;
+  x.value -= 400;
 };
 </script>
