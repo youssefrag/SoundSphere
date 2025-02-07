@@ -18,7 +18,7 @@
         <input
           type="text"
           placeholder="Seach for music here"
-          class="w-[80%] border-none bg-gray-400 focus:border-none focus:outline-none text-3xl font-black text-gray-700 placeholder-gray-700"
+          class="w-[80%] bg-gray-400 border-none focus:border-none focus:outline-none text-3xl font-black text-gray-700 placeholder-gray-700"
         />
         <button
           class="text-[#0E0E0F] text-sm py-2 px-8 rounded-full bg-gradient-to-r from-[#98C970] to-[#0DE27C] h-[80%]"
@@ -40,7 +40,7 @@
       />
 
       <div
-        class="flex-1 w-[100%] flex gap-5 pb-[1rem] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#0E0E0F] [&::-webkit-scrollbar-thumb]:bg-[#4636FF] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
+        class="flex-1 w-[100%] flex gap-5 pb-[2rem] overflow-y-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#565657] [&::-webkit-scrollbar-thumb]:bg-[#4636FF] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
         ref="carousel"
       >
         <div v-for="(artist, index) in music" :key="index">

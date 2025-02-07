@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex items-end justify-between w-[100%] h-[400px] absolute top-[100px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] px-[40px] py-[40px]"
+    class="flex items-end justify-between w-[100%] h-[400px] top-[100px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] px-[40px] py-[40px]"
   >
     <div class="flex items-end gap-6">
       <v-lazy-image
@@ -48,6 +48,18 @@
     >
       <font-awesome-icon :icon="['fas', 'play']" class="text-white text-4xl" />
     </div>
+  </section>
+  <section class="h-[600px] w-[100%] bg-[#0E0E0F] px-[40px] py-[60px]">
+    <div class="text-white text-4xl font-semibold mb-10">
+      Here's What People Are Saying About {{ song.name }}
+    </div>
+
+    <textarea
+      cols="4"
+      type="text"
+      placeholder="Write Comment Here"
+      class="w-[100%] h-[273px] p-[20px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-sm font-semibold text-white placeholder-white rounded-2xl"
+    />
   </section>
 </template>
 
