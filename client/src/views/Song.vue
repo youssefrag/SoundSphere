@@ -2,7 +2,8 @@
   <section
     class="w-[100%] h-[400px] absolute top-[100px] bg-gradient-to-r from-[#0E0E0F] to-[#1c1666] px-[60px] py-[20px]"
   >
-    <div class="h-[320px] w-[320px]" :class="bgClass"></div>
+    <div :class="bgClass" class="h-[320px] w-[320px] bg-cover bg-center"></div>
+    <!-- <div class="h-[320px] w-[320px]" :class="bgClass"></div> -->
     <!-- <div class="h-[320px] w-[320px]">
       <img :src="imageUrl" alt="artist" class="h-[100%] w-auto" />
     </div> -->
@@ -10,8 +11,6 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-
 const song = {
   name: "Midnight Drive",
   artist: "Alex Waves",
