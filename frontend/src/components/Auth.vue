@@ -17,6 +17,7 @@
       >
 
       <div
+        ref="deleteModalRef"
         class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
       >
         <div class="py-4 text-left px-6">
@@ -63,12 +64,39 @@
   </div>
 </template>
 <script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { onClickOutside } from "@vueuse/core";
+
 import useModalStore from "@/stores/modal";
 import AppLoginForm from "./AppLoginForm.vue";
 import AppRegisterForm from "./AppRegisterForm.vue";
-import { ref } from "vue";
 
 let modalStore = useModalStore();
 
+// Close modal when clicking outside
+const deleteModalRef = ref(null);
+
+onClickOutside(deleteModalRef, (event) => {
+  modalStore.toggleModal();
+});
+
+// Disable scrolling when modal is open
+onMounted(() => {
+  document.body.style.overflow = "hidden";
+  document.body.style.height = "100vh";
+});
+
+onBeforeUnmount(() => {
+  document.body.style.overflow = "";
+  document.body.style.height = "";
+});
+
 let tab = ref("login");
 </script>
+
+<style scoped>
+:global(.noscroll) {
+  overflow: hidden;
+  height: 100vh;
+}
+</style>
