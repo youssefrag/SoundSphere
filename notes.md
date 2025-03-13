@@ -18,6 +18,8 @@
 #FFFFFF
 #4636FF
 
+#055a32
+
 # Database Schema
 
 ## User
