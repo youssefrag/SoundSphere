@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-6">
     <div>
-      <label for="email" class="block mb-2 text-lg font-bold text-[#0E0E0F]"
+      <label for="name" class="block mb-2 text-lg font-bold text-[#0E0E0F]"
         >Name</label
       >
       <input
@@ -18,19 +18,19 @@
       >
       <input
         type="email"
-        id="first_name"
+        id="email"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="john@example.com"
         required
       />
     </div>
     <div>
-      <label for="email" class="block mb-2 text-lg font-bold text-[#0E0E0F]"
+      <label for="password" class="block mb-2 text-lg font-bold text-[#0E0E0F]"
         >Password</label
       >
       <input
         type="password"
-        id="first_name"
+        id="password"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="password"
         required
@@ -49,5 +49,17 @@
     </button>
   </div>
 </template>
+<script setup>
+import { reactive } from "vue";
 
-<script setup></script>
+const formData = reactive({
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+});
+
+const handleRegister = () => {
+  console.log(formData);
+};
+</script>
