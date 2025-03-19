@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   frontend:
     build:
@@ -39,18 +37,27 @@ services:
       - app-network
 
   database:
-    image: postgres:13
+    image: postgres:latest
     container_name: database
     environment:
-      POSTGRES_USER: youruser
-      POSTGRES_PASSWORD: yourpassword
-      POSTGRES_DB: yourdb
+      POSTGRES_USER: postgres # Ensure this matches the user you're trying to use
+      POSTGRES_PASSWORD: supersecret
+      POSTGRES_DB: soundsphere # The default database that will be created
     ports:
       - "5432:5432"
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
     networks:
       - app-network
+
+volumes:
+  postgres_data:
 
 networks:
   app-network:
