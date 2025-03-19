@@ -28,6 +28,8 @@ func InitDB() {
 		db.SetMaxIdleConns(5)
 
 		createTables()
+
+		fmt.Println("Database Tables have been created")
 }
 
 func createTables() {
@@ -36,15 +38,16 @@ func createTables() {
 			id SERIAL PRIMARY KEY,
 			name TEXT NOT NULL,
 			email TEXT NOT NULL UNIQUE,
-			password TEXT NOT NULL
+			password TEXT NOT NULL,
+			imageUrl TEXT
 		)
 	`
 
 	_, err := db.Exec(createUsersTable)
 
-	fmt.Println("Users table created!!")
-
 	if err != nil {
 		panic("Could not create users table.")
 	}
+
+	fmt.Println("Users table has been created!")
 }
