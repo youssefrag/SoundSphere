@@ -28,9 +28,10 @@ services:
       - /app/go_modules
     environment:
       - DB_HOST=database
-      - DB_USER=youruser
-      - DB_PASSWORD=yourpassword
-      - DB_NAME=yourdb
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=supersecret
+      - DB_NAME=soundsphere
     depends_on:
       - database
     networks:
