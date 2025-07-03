@@ -1,5 +1,5 @@
 # Use Golang base image with Go version 1.23 (or higher)
-FROM golang:1.23-alpine
+FROM golang:1.24-alpine
 
 # Install dependencies and build tools
 RUN apk update && apk add --no-cache git
