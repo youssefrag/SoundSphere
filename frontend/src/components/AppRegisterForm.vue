@@ -84,6 +84,7 @@
 <script setup>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
+import api from "@/api";
 
 const schema = yup.object({
   name: yup.string().required("Name is required"),
@@ -101,7 +102,21 @@ const schema = yup.object({
     .required("Please confirm your password"),
 });
 
-const onSubmit = (values) => {
+const onSubmit = async (values) => {
   console.log(values);
+
+  try {
+    // POST /users on Go server
+
+    const { data } = await api.post("/signup", {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    });
+
+    console.log("saved user", data);
+  } catch (err) {
+    console.error("API error", err);
+  }
 };
 </script>

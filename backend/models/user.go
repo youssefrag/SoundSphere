@@ -13,25 +13,19 @@ type User struct {
 
 var users = []User{}
 
-func (u *User) Save() error{
-	query := "INSERT INTO users(name, email, password) VALUES (?, ?)"
-	stmt, err := db.DB.Prepare(query)
-	
-	if err != nil {
-		return err
-	}
+func (u *User) Save() error {
+  // 1) Use Postgres placeholders ($1, $2, $3)
+  // 2) Add RETURNING id so we can grab the new primary key
+  const query = `
+		INSERT INTO users(name, email, password)
+		VALUES ($1, $2, $3)
+		RETURNING id;
+	`
 
-	defer stmt.Close()
-
-	result, err := stmt.Exec(u.Name, u.Email, u.Password)
-
-	if err != nil {
-		return err
-	}
-
-	id, err := result.LastInsertId()
-	u.ID = id
-	return err
+  // QueryRow + Scan is the simplest way to get the new id
+  return db.DB.
+    QueryRow(query, u.Name, u.Email, u.Password).
+    Scan(&u.ID)
 }
 
 func GetAllUsers() []User {
