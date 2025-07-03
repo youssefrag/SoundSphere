@@ -25,7 +25,7 @@
       </div>
 
       <button
-        @click="modalStore.toggleModal"
+        @click="modalStore.toggle"
         class="text-[#0E0E0F] text-sm py-2 px-8 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C]"
       >
         Login
@@ -36,7 +36,7 @@
 ☹️
 
 <script setup>
-import useModalStore from "@/stores/modal";
+import { useModalStore } from "@/stores/modal";
 
-let modalStore = useModalStore();
+const modalStore = useModalStore();
 </script>

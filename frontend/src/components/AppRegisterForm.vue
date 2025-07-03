@@ -86,6 +86,10 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import api from "@/api";
 
+import { useModalStore } from "@/stores/modal";
+
+const modalStore = useModalStore();
+
 const schema = yup.object({
   name: yup.string().required("Name is required"),
   email: yup
@@ -114,7 +118,7 @@ const onSubmit = async (values) => {
       password: values.password,
     });
 
-    console.log("saved user", data);
+    modalStore.close();
   } catch (err) {
     console.error("API error", err);
   }

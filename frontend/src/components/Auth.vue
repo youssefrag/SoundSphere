@@ -27,7 +27,7 @@
             <!-- Modal Close Button -->
             <div
               class="modal-close cursor-pointer z-50"
-              @click="modalStore.toggleModal"
+              @click="modalStore.toggle"
             >
               <i class="fas fa-times text-xl"></i>
             </div>
@@ -67,17 +67,17 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
-import useModalStore from "@/stores/modal";
 import AppLoginForm from "./AppLoginForm.vue";
 import AppRegisterForm from "./AppRegisterForm.vue";
+import { useModalStore } from "@/stores/modal";
 
-let modalStore = useModalStore();
+const modalStore = useModalStore();
 
 // Close modal when clicking outside
 const deleteModalRef = ref(null);
 
 onClickOutside(deleteModalRef, (event) => {
-  modalStore.toggleModal();
+  modalStore.toggle();
 });
 
 // Disable scrolling when modal is open
