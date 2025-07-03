@@ -5,6 +5,7 @@
         >Name</label
       >
       <input
+        v-model="formData.name"
         type="text"
         id="name"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -17,6 +18,7 @@
         >Email</label
       >
       <input
+        v-model="formData.email"
         type="email"
         id="email"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -29,10 +31,26 @@
         >Password</label
       >
       <input
+        v-model="formData.password"
         type="password"
         id="password"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="password"
+        required
+      />
+    </div>
+    <div>
+      <label
+        for="confirmPassword"
+        class="block mb-2 text-lg font-bold text-[#0E0E0F]"
+        >Confirm Password</label
+      >
+      <input
+        v-model="formData.confirmPassword"
+        type="password"
+        id="confirmPassword"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="confirm password"
         required
       />
     </div>
@@ -43,6 +61,7 @@
       Upload Picture
     </button>
     <button
+      @click="handleRegister"
       class="text-[#fff] text-lg font-bold py-2 px-8 rounded-xl bg-[#055a32]"
     >
       Register your account
