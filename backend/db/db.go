@@ -9,7 +9,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
+var DB *sql.DB
 
 func InitDB() {
 	host := os.Getenv("DB_HOST")
@@ -24,13 +24,13 @@ func InitDB() {
 	)
 
 	var err error
-	db, err = sql.Open("postgres", connStr)
+	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
 		panic(fmt.Sprintf("Could not open DB: %v", err))
 	}
 
 	for i := 0; i < 5; i++ {
-		err = db.Ping()
+		err = DB.Ping()
 		if err == nil {
 			break
 		}
@@ -42,40 +42,19 @@ func InitDB() {
 	}
 
 
-	db.SetMaxOpenConns(10)
-	db.SetMaxIdleConns(5)
+	DB.SetMaxOpenConns(10)
+	DB.SetMaxIdleConns(5)
 
 	createTables()
 	fmt.Println("✅ Connected to Postgres and ensured tables exist.")
 }
 
-// func InitDB() {
-//     connStr := "user=postgres password=supersecret dbname=soundsphere host=database port=5432 sslmode=disable"
-// 		var err error
-//     db, err = sql.Open("postgres", connStr)
 
-// 		if err != nil {
-// 			panic("Could not connect to database.")
-// 		}
-
-// 			// Test the connection
-// 		err = db.Ping()
-// 		if err != nil {
-// 			panic(fmt.Sprintf("Could not ping the database: %v", err))
-// 		}
-
-// 		db.SetMaxOpenConns(10)
-// 		db.SetMaxIdleConns(5)
-
-// 		createTables()
-
-// 		fmt.Println("Database Tables have been created!")
-// }
 
 func createTables() {
 	createUsersTable := `
 		CREATE TABLE IF NOT EXISTS users (
-			id SERIAL PRIMARY KEY,
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,
 			email TEXT NOT NULL UNIQUE,
 			password TEXT NOT NULL,
@@ -83,7 +62,7 @@ func createTables() {
 		)
 	`
 
-	_, err := db.Exec(createUsersTable)
+	_, err := DB.Exec(createUsersTable)
 
 	if err != nil {
 		panic("Could not create users table.")
