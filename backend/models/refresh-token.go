@@ -6,14 +6,35 @@ import (
 	"github.com/youssefrag/SoundSphere/db"
 )
 
-// StoreRefreshToken saves a new refresh‐token record.
 func StoreRefreshToken(userID int64, jti string, expires time.Time) error {
-  const q = `
-    INSERT INTO refresh_tokens (user_id, jti, expires_at)
-    VALUES ($1, $2, $3)
-  `
-  _, err := db.DB.Exec(q, userID, jti, expires)
-  return err
+	// start a transaction
+	tx, err := db.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// 1) insert the fresh token
+	const insertQ = `
+		INSERT INTO refresh_tokens (user_id, jti, expires_at)
+		VALUES ($1, $2, $3)
+	`
+	if _, err := tx.Exec(insertQ, userID, jti, expires); err != nil {
+		return err
+	}
+
+	// 2) delete any of this user's tokens that are expired or revoked
+	const cleanupQ = `
+		DELETE FROM refresh_tokens
+		WHERE user_id = $1
+		  AND (expires_at < now() OR revoked = TRUE)
+	`
+	if _, err := tx.Exec(cleanupQ, userID); err != nil {
+		return err
+	}
+
+	// commit both operations together
+	return tx.Commit()
 }
 
 // IsRefreshTokenValid returns true if the given jti exists,
