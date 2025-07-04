@@ -47,8 +47,10 @@ import * as yup from "yup";
 import api from "@/api";
 
 import { useModalStore } from "@/stores/modal";
+import { useUserStore } from "@/stores/user";
 
 const modalStore = useModalStore();
+const userStore = useUserStore();
 
 const schema = yup.object({
   email: yup
@@ -63,11 +65,7 @@ const schema = yup.object({
 
 const onSubmit = async (values) => {
   try {
-    await api.post("/login", {
-      email: values.email,
-      password: values.password,
-    });
-
+    await userStore.login(values.email, values.password);
     modalStore.close();
   } catch (err) {
     console.error("API error", err);

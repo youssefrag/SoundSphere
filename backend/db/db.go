@@ -46,7 +46,7 @@ func InitDB() {
 	DB.SetMaxIdleConns(5)
 
 	createTables()
-	fmt.Println("✅ Connected to Postgres and ensured tables exist.")
+	fmt.Println("Connected to Postgres and ensured tables exist. ✅")
 }
 
 
@@ -68,5 +68,25 @@ func createTables() {
 		panic("Could not create users table.")
 	}
 
-	fmt.Println("Users table has been created!")
+	fmt.Println("Users table has been created! ✅")
+
+
+  createRefreshTokensTable := `
+    CREATE TABLE IF NOT EXISTS refresh_tokens (
+      id          SERIAL PRIMARY KEY,
+      user_id     BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      jti         VARCHAR(36) NOT NULL UNIQUE,
+      expires_at  TIMESTAMPTZ NOT NULL,
+      revoked     BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `
+
+  if _, err := DB.Exec(createRefreshTokensTable); err != nil {
+    // include the real error so you can see what's wrong
+    panic(fmt.Sprintf("Could not create refresh_tokens table: %v", err))
+  }
+
+  fmt.Println("Refresh_tokens table created! ✅")
 }
+

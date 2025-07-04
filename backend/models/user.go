@@ -1,6 +1,11 @@
 package models
 
 import (
+	"database/sql"
+	"errors"
+	"fmt"
+
+	"github.com/lib/pq"
 	"github.com/youssefrag/SoundSphere/db"
 	"github.com/youssefrag/SoundSphere/utils"
 )
@@ -45,7 +50,59 @@ func (u *User) Save() error {
     `
   }
 
-	return db.DB.QueryRow(query, args...).Scan(&u.ID)
+	err = db.DB.QueryRow(query, args...).Scan(&u.ID)
+	if err != nil {
+			// check if it's a Postgres error
+			var pqErr *pq.Error
+			if errors.As(err, &pqErr) {
+					// 23505 = unique_violation
+					if pqErr.Code == "23505" && pqErr.Constraint == "users_email_key" {
+
+							fmt.Println("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴")
+
+							return errors.New("email already exists")
+					}
+			}
+			return err
+	}
+	return nil
 }
 
+func (u *User) ValidateCredentials() error {
+	query := `
+		SELECT id, name, password FROM users WHERE email = $1
+	`
+	row := db.DB.QueryRow(query, u.Email)
 
+	var retrievedPassword string
+	err := row.Scan(&u.ID, &u.Name, &retrievedPassword)
+
+	if err != nil {
+		return errors.New("credentials invalid")
+	}
+
+	passwordIsValid := utils.CheckPasswordHash(u.Password, retrievedPassword)
+
+	if !passwordIsValid {
+		return errors.New("credentials invalid")
+	}
+
+	return nil
+}
+
+func GetUserByID(id int64) (User, error) {
+  const q = `
+    SELECT id, name, email
+    FROM users
+    WHERE id = $1
+  `
+  var u User
+  err := db.DB.QueryRow(q, id).Scan(&u.ID, &u.Name, &u.Email)
+  if err != nil {
+    if errors.Is(err, sql.ErrNoRows) {
+      return u, errors.New("user not found")
+    }
+    return u, err
+  }
+  return u, nil
+}

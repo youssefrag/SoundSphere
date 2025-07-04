@@ -1,15 +1,21 @@
 package main
 
 import (
+	"log"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/youssefrag/SoundSphere/db"
 	"github.com/youssefrag/SoundSphere/routes"
 )
 
 func main() {
+
+		if err := godotenv.Load(); err != nil {
+    	log.Println("No .env file found — relying on real environment")
+  	}
 
     db.InitDB()
 
