@@ -65,7 +65,7 @@ func createTables() {
 	_, err := DB.Exec(createUsersTable)
 
 	if err != nil {
-		panic("Could not create users table. :(")
+		panic("Could not create users table.")
 	}
 
 	fmt.Println("Users table has been created!")

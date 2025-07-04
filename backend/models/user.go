@@ -1,6 +1,9 @@
 package models
 
-import "github.com/youssefrag/SoundSphere/db"
+import (
+	"github.com/youssefrag/SoundSphere/db"
+	"github.com/youssefrag/SoundSphere/utils"
+)
 
 type User struct {
 	ID int64
@@ -18,8 +21,14 @@ func (u *User) Save() error {
 		query string
 		args []interface{}
 	)
+
+	hashedPassword, err := utils.HashPassword(u.Password)
+
+	if err != nil {
+		return err
+	}
 	
-	args = []interface{}{u.Name, u.Email, u.Password}
+	args = []interface{}{u.Name, u.Email, hashedPassword}
 
 	if u.ImageUrl != "" {
 		// include image_url
