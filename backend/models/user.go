@@ -7,13 +7,11 @@ import (
 
 type User struct {
 	ID int64
-	Name string `binding:"required"`
+	Name string
 	Email string `binding:"required"`
 	Password string `binding:"required"`
 	ImageUrl string
 }
-
-var users = []User{}
 
 func (u *User) Save() error {
 
@@ -51,19 +49,3 @@ func (u *User) Save() error {
 }
 
 
-// func (u *User) Save() error {
-
-//   const query = `
-// 		INSERT INTO users(name, email, password)
-// 		VALUES ($1, $2, $3)
-// 		RETURNING id;
-// 	`
-
-//   return db.DB.
-//     QueryRow(query, u.Name, u.Email, u.Password).
-//     Scan(&u.ID)
-// }
-
-func GetAllUsers() []User {
- return users
-}

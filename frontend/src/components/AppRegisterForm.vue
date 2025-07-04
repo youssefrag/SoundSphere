@@ -107,12 +107,8 @@ const schema = yup.object({
 });
 
 const onSubmit = async (values) => {
-  console.log(values);
-
   try {
-    // POST /users on Go server
-
-    const { data } = await api.post("/signup", {
+    await api.post("/signup", {
       name: values.name,
       email: values.email,
       password: values.password,
