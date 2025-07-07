@@ -25,6 +25,7 @@ func signup(context *gin.Context) {
 	err = user.Save()
 
 	if err != nil {
+
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not save user."})
 		return
 	}
@@ -97,6 +98,27 @@ func login(context *gin.Context) {
 	})
 
 }
+
+func logout(c *gin.Context) {
+  // pull the refresh token identifier (JTI) out of the HTTP-only cookie
+  rtCookie, cookieErr := c.Cookie("refresh_token")
+  if cookieErr != nil {
+    // there was no cookie → nothing to revoke
+    c.Status(http.StatusNoContent)
+    return
+  }
+
+  // now delete exactly that token (or all for this user, if that's your goal)
+  if err := models.RemoveRefreshTokenByJTI(rtCookie); err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": "could not revoke token"})
+    return
+  }
+
+  // clear the cookie
+  c.SetCookie("refresh_token", "", -1, "/", "", true, true)
+  c.Status(http.StatusOK)
+}
+
 
 func refresh(c *gin.Context) {
   // 1) Read the incoming refresh cookie

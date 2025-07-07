@@ -25,18 +25,34 @@
       </div>
 
       <button
+        v-if="!userStore.accessToken"
         @click="modalStore.toggle"
         class="text-[#0E0E0F] text-sm py-2 px-8 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C]"
       >
         Login
       </button>
+      <button
+        v-if="userStore.accessToken"
+        class="text-white text-sm py-2 px-8 rounded-3xl bg-[#4636FF] flex gap-2 items-center"
+      >
+        <font-awesome-icon :icon="['fas', 'user']" class="text-white" />
+        <div class="font-bold">{{ userStore.name.split(" ")[0] }}</div>
+      </button>
+      <button
+        v-if="userStore.accessToken"
+        @click="userStore.logout"
+        class="text-[#0E0E0F] text-sm py-2 px-8 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C]"
+      >
+        Logout
+      </button>
     </div>
   </nav>
 </template>
-☹️
 
 <script setup>
 import { useModalStore } from "@/stores/modal";
+import { useUserStore } from "@/stores/user";
 
 const modalStore = useModalStore();
+const userStore = useUserStore();
 </script>

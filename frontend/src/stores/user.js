@@ -16,12 +16,16 @@ export const useUserStore = defineStore("user", {
     },
 
     async register(name, email, password) {
-      const response = await api.post("/signup", { name, email, password });
+      try {
+        const response = await api.post("/signup", { name, email, password });
 
-      console.log(response);
-
-      if (response.status === 201) {
-        this.login(email, password);
+        if (response.status === 201) {
+          this.login(email, password);
+        }
+      } catch (error) {
+        if (error.status) {
+          alert("Email already in use");
+        }
       }
     },
 
@@ -34,6 +38,18 @@ export const useUserStore = defineStore("user", {
 
       api.defaults.headers.common.Authorization = `Bearer ${this.accessToken}`;
     },
+
+    async logout() {
+      console.log("reached here");
+      try {
+        await api.post("/logout", {}, { withCredentials: true });
+      } catch (error) {
+        console.warn("could not revode refresh token", error);
+      } finally {
+        this.clearSession();
+      }
+    },
+
     async refresh() {
       try {
         const { data } = await api.post("/refresh");

@@ -58,8 +58,6 @@ func (u *User) Save() error {
 					// 23505 = unique_violation
 					if pqErr.Code == "23505" && pqErr.Constraint == "users_email_key" {
 
-							fmt.Println("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴")
-
 							return errors.New("email already exists")
 					}
 			}
@@ -89,6 +87,15 @@ func (u *User) ValidateCredentials() error {
 
 	return nil
 }
+
+func RemoveRefreshTokenByJTI(jti string) error {
+  const q = `DELETE FROM refresh_tokens WHERE jti = $1`
+  if _, err := db.DB.Exec(q, jti); err != nil {
+    return fmt.Errorf("could not delete refresh token: %w", err)
+  }
+  return nil
+}
+
 
 func GetUserByID(id int64) (User, error) {
   const q = `
