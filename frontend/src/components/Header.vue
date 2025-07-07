@@ -33,7 +33,7 @@
       </button>
       <button
         v-if="userStore.accessToken"
-        class="text-white text-sm py-2 px-8 rounded-3xl bg-[#4636FF] flex gap-2 items-center"
+        class="text-white text-sm py-2 px-6 rounded-3xl bg-[#4636FF] flex gap-2 items-center"
       >
         <font-awesome-icon :icon="['fas', 'user']" class="text-white" />
         <div class="font-bold">{{ userStore.name.split(" ")[0] }}</div>
