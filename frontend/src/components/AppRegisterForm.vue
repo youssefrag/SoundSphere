@@ -66,22 +66,35 @@
           class="text-red-600 text-sm mt-1"
         />
       </div>
+
+      <input
+        ref="fileInput"
+        type="file"
+        accept="image/x"
+        @change="onFileChange"
+        class="hidden"
+      />
+
       <button
+        type="button"
         class="text-white text-lg font-bold py-2 px-8 rounded-xl bg-gray-700"
+        @click="triggerFileDialog"
       >
         <font-awesome-icon :icon="['fas', 'upload']" class="text-[#FFA900]" />
-        Upload Picture
+        {{ fileName || "Upload Picture" }}
       </button>
       <button
         type="submit"
         class="text-[#fff] text-lg font-bold py-2 px-8 rounded-xl bg-[#055a32]"
+        :disabled="loading"
       >
-        Register your account
+        {{ loading ? "Registering…" : "Register your account" }}
       </button>
     </div>
   </Form>
 </template>
 <script setup>
+import { ref as vueRef } from "vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import api from "@/api";
@@ -89,8 +102,34 @@ import api from "@/api";
 import { useModalStore } from "@/stores/modal";
 import { useUserStore } from "@/stores/user";
 
+import { storage, storageRef, uploadBytesToPath, getURL } from "@/firebase";
+
 const modalStore = useModalStore();
 const userStore = useUserStore();
+
+const file = vueRef(null);
+const fileName = vueRef("");
+const loading = vueRef(false);
+const fileInput = vueRef(null);
+
+function triggerFileDialog() {
+  fileInput.value?.click();
+}
+
+function onFileChange(e) {
+  const selected = e.target.files?.[0];
+  if (selected) {
+    file.value = selected;
+    fileName.value = selected.name;
+  }
+}
+
+async function uploadAvatar(file) {
+  const path = `avatars/${file.name}`;
+  const avatarRef = storageRef(storage, path);
+  await uploadBytesToPath(avatarRef, file);
+  return await getURL(avatarRef);
+}
 
 const schema = yup.object({
   name: yup.string().required("Name is required"),
@@ -108,12 +147,23 @@ const schema = yup.object({
     .required("Please confirm your password"),
 });
 
-const onSubmit = async (values) => {
+async function onSubmit(values) {
+  loading.value = true;
   try {
-    await userStore.register(values.name, values.email, values.password);
+    const avatarUrl = file.value ? await uploadAvatar(file.value) : undefined;
+
+    await userStore.register(
+      values.name,
+      values.email,
+      values.password,
+      avatarUrl
+    );
     modalStore.close();
   } catch (err) {
-    console.error("API error", err);
+    console.error(err);
+    alert("Registration failed: " + (err.response?.data?.error || err.message));
+  } finally {
+    loading.value = false;
   }
-};
+}
 </script>

@@ -94,6 +94,7 @@ func login(context *gin.Context) {
 		"user": gin.H{
     	"email": user.Email,
 			"name": user.Name,
+      "imageUrl": user.ImageUrl,
   	}, 
 	})
 

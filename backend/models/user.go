@@ -34,9 +34,9 @@ func (u *User) Save() error {
 	args = []interface{}{u.Name, u.Email, hashedPassword}
 
 	if u.ImageUrl != "" {
-		// include image_url
+		// include imageurl
 		query = `
-			INSERT INTO users (name, email, password, image_url)
+			INSERT INTO users (name, email, password, imageurl)
 			VALUES ($1, $2, $3, $4)
 			RETURNING id;
 		`
@@ -68,12 +68,12 @@ func (u *User) Save() error {
 
 func (u *User) ValidateCredentials() error {
 	query := `
-		SELECT id, name, password FROM users WHERE email = $1
+		SELECT id, name, password, imageurl FROM users WHERE email = $1
 	`
 	row := db.DB.QueryRow(query, u.Email)
 
 	var retrievedPassword string
-	err := row.Scan(&u.ID, &u.Name, &retrievedPassword)
+	err := row.Scan(&u.ID, &u.Name, &retrievedPassword, &u.ImageUrl)
 
 	if err != nil {
 		return errors.New("credentials invalid")

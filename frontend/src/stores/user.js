@@ -6,18 +6,25 @@ export const useUserStore = defineStore("user", {
     accessToken: null,
     name: null,
     email: null,
+    imageUrl: null,
   }),
   actions: {
     clearSession() {
       this.accessToken = null;
       this.name = null;
       this.email = null;
+      this.imageUrl = null;
       delete api.defaults.headers.common.Authorization;
     },
 
-    async register(name, email, password) {
+    async register(name, email, password, avatarUrl) {
       try {
-        const response = await api.post("/signup", { name, email, password });
+        const response = await api.post("/signup", {
+          name,
+          email,
+          password,
+          imageUrl: avatarUrl,
+        });
 
         if (response.status === 201) {
           this.login(email, password);
@@ -32,9 +39,12 @@ export const useUserStore = defineStore("user", {
     async login(email, password) {
       const { data } = await api.post("/login", { email, password });
 
+      console.log(data);
+
       this.accessToken = data.token;
       this.email = data.user.email;
       this.name = data.user.name;
+      this.imageUrl = data.user.imageUrl;
 
       api.defaults.headers.common.Authorization = `Bearer ${this.accessToken}`;
     },
