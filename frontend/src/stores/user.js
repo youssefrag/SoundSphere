@@ -15,6 +15,16 @@ export const useUserStore = defineStore("user", {
       delete api.defaults.headers.common.Authorization;
     },
 
+    async register(name, email, password) {
+      const response = await api.post("/signup", { name, email, password });
+
+      console.log(response);
+
+      if (response.status === 201) {
+        this.login(email, password);
+      }
+    },
+
     async login(email, password) {
       const { data } = await api.post("/login", { email, password });
 

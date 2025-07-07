@@ -87,8 +87,10 @@ import * as yup from "yup";
 import api from "@/api";
 
 import { useModalStore } from "@/stores/modal";
+import { useUserStore } from "@/stores/user";
 
 const modalStore = useModalStore();
+const userStore = useUserStore();
 
 const schema = yup.object({
   name: yup.string().required("Name is required"),
@@ -108,12 +110,7 @@ const schema = yup.object({
 
 const onSubmit = async (values) => {
   try {
-    await api.post("/signup", {
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    });
-
+    await userStore.register(values.name, values.email, values.password);
     modalStore.close();
   } catch (err) {
     console.error("API error", err);
