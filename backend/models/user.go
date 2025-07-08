@@ -117,13 +117,24 @@ func GetUserByID(id int64) (User, error) {
     FROM users
     WHERE id = $1
   `
-  var u User
-  err := db.DB.QueryRow(q, id).Scan(&u.ID, &u.Name, &u.Email, &u.ImageUrl)
+	var (
+		u     User
+		nsImg sql.NullString
+	)
+
+  err := db.DB.QueryRow(q, id).Scan(&u.ID, &u.Name, &u.Email, &nsImg)
   if err != nil {
     if errors.Is(err, sql.ErrNoRows) {
       return u, errors.New("user not found")
     }
     return u, err
   }
+
+	if nsImg.Valid {
+		u.ImageUrl = nsImg.String
+	} else {
+		u.ImageUrl = ""  // or set a default avatar URL
+	}
+	
   return u, nil
 }

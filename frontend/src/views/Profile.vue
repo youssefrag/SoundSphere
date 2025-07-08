@@ -25,7 +25,7 @@
       />
       <v-lazy-image
         v-else
-        src="https://wallpapers.com/png/generic-person-icon-profile-ulmsmhnz0kqafcqn-2.html"
+        src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         class="h-[250px] w-[250px] object-cover rounded-full border-2 border-white"
       />
     </div>
