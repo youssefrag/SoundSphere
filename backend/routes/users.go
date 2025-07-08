@@ -88,15 +88,29 @@ func login(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not authenticate user."})
 	}
 
-	context.JSON(http.StatusOK, gin.H{
-		"message": "Login successful!",
-		"token": token,  
-		"user": gin.H{
-    	"email": user.Email,
-			"name": user.Name,
-      "imageUrl": user.ImageUrl,
-  	}, 
-	})
+  if user.ImageUrl != "" {
+
+    context.JSON(http.StatusOK, gin.H{
+      "message": "Login successful!",
+      "token": token,  
+      "user": gin.H{
+        "email": user.Email,
+        "name": user.Name,
+        "imageUrl": user.ImageUrl,
+      }, 
+  
+    })
+  } else {
+    context.JSON(http.StatusOK, gin.H{
+      "message": "Login successful!",
+      "token": token,  
+      "user": gin.H{
+        "email": user.Email,
+        "name": user.Name,
+      }, 
+  
+    })
+  }
 
 }
 

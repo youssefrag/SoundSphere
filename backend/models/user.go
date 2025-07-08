@@ -72,12 +72,26 @@ func (u *User) ValidateCredentials() error {
 	`
 	row := db.DB.QueryRow(query, u.Email)
 
-	var retrievedPassword string
-	err := row.Scan(&u.ID, &u.Name, &retrievedPassword, &u.ImageUrl)
+	var (
+		retrievedPassword string
+		nsImage           sql.NullString
+	)
+
+	
+	err := row.Scan(&u.ID, &u.Name, &retrievedPassword, &nsImage)
+
 
 	if err != nil {
 		return errors.New("credentials invalid")
 	}
+
+	if nsImage.Valid {
+    u.ImageUrl = nsImage.String
+  } else {
+    u.ImageUrl = "" 
+	}
+
+	
 
 	passwordIsValid := utils.CheckPasswordHash(u.Password, retrievedPassword)
 

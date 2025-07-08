@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex items-end justify-center w-[100%] top-[100px] bg-[#0E0E0F] px-[40px] py-[40px]"
+    class="flex flex-col justify-center w-[100%] top-[100px] bg-[#0E0E0F] px-[40px] py-[40px]"
   >
     <div
       class="w-[100%] h-[300px] rounded-xl bg-gradient-to-r from-[#15104c] via-black to-[#032d19] flex flex-col justify-end items-start p-[20px]"
@@ -15,8 +15,19 @@
       </div>
     </div>
 
-    <div class="absolute left-0 bottom-0 w-full transform translate-y-1/2">
-      <v-lazy-image :src="userStore.imageUrl" />
+    <div
+      class="w-full flex flex-col items-center transform -translate-y-[125px]"
+    >
+      <v-lazy-image
+        v-if="userStore.imageUrl"
+        :src="userStore.imageUrl"
+        class="h-[250px] w-[250px] object-cover rounded-full border-2 border-white"
+      />
+      <v-lazy-image
+        v-else
+        src="https://wallpapers.com/png/generic-person-icon-profile-ulmsmhnz0kqafcqn-2.html"
+        class="h-[250px] w-[250px] object-cover rounded-full border-2 border-white"
+      />
     </div>
   </section>
 </template>

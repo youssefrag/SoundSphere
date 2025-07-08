@@ -57,6 +57,7 @@ export const useUserStore = defineStore("user", {
         console.warn("could not revode refresh token", error);
       } finally {
         this.clearSession();
+        window.location.reload(false);
       }
     },
 
