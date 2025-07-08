@@ -190,6 +190,7 @@ func refresh(c *gin.Context) {
       "id":    userObj.ID,
       "email": userObj.Email,
       "name":  userObj.Name,
+      "imageUrl": userObj.ImageUrl,
     },
   })
 }

@@ -99,12 +99,12 @@ func RemoveRefreshTokenByJTI(jti string) error {
 
 func GetUserByID(id int64) (User, error) {
   const q = `
-    SELECT id, name, email
+    SELECT id, name, email, imageurl
     FROM users
     WHERE id = $1
   `
   var u User
-  err := db.DB.QueryRow(q, id).Scan(&u.ID, &u.Name, &u.Email)
+  err := db.DB.QueryRow(q, id).Scan(&u.ID, &u.Name, &u.Email, &u.ImageUrl)
   if err != nil {
     if errors.Is(err, sql.ErrNoRows) {
       return u, errors.New("user not found")

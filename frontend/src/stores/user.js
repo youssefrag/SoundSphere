@@ -67,6 +67,9 @@ export const useUserStore = defineStore("user", {
         this.accessToken = data.token ?? data.access_token;
         this.email = data.user.email;
         this.name = data.user.name;
+        this.imageUrl = data.user.imageUrl;
+
+        console.log(data);
 
         api.defaults.headers.common.Authorization = `Bearer ${this.accessToken}`;
       } catch (error) {
