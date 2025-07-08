@@ -36,7 +36,7 @@
       <div class="font-bold mt-4 text-[#007bff] flex items-center gap-2">
         <font-awesome-icon :icon="['fas', 'check']" />
 
-        <div>Verfied</div>
+        <div>Verified</div>
       </div>
     </div>
   </section>
@@ -44,60 +44,79 @@
   <section
     class="flex flex-col justify-center w-[100%] bg-[#0E0E0F] px-[60px] py-[40px]"
   >
-    <div class="text-3xl font font-extrabold text-white mb-[40px]">
+    <div class="text-3xl font-extrabold text-white mb-[40px]">
       Upload Your New Song 🔥
     </div>
     <Form @submit="onSubmit">
       <div class="flex justify-between gap-8 mb-8">
+        <!-- Song Name -->
         <div class="flex flex-col flex-1 gap-2">
           <label class="text-white pl-2" for="songName">Song Name</label>
           <input
             id="songName"
             v-model="songName"
+            @blur="songNameBlur"
             type="text"
-            class="w-[100%] p-[10px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-sm font-semibold text-white placeholder-white placeholder-white/30 rounded-2xl"
             placeholder="Enter song name"
+            class="w-full p-[10px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] rounded-2xl text-sm font-semibold text-white placeholder-white/30 focus:outline-none focus:border-[#0DE27C]"
           />
+          <p v-if="songNameError" class="text-red-500 text-sm pl-2">
+            {{ songNameError }}
+          </p>
         </div>
+
+        <!-- Genre -->
         <div class="flex flex-col flex-1 gap-2">
           <label class="text-white pl-2" for="genre">Genre</label>
           <input
             id="genre"
             v-model="genre"
+            @blur="genreBlur"
             type="text"
-            class="w-[100%] p-[10px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-sm font-semibold text-white placeholder-white/30 placeholder-white rounded-2xl"
             placeholder="e.g. Hip-Hop"
+            class="w-full p-[10px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] rounded-2xl text-sm font-semibold text-white placeholder-white/30 focus:outline-none focus:border-[#0DE27C]"
           />
+          <p v-if="genreError" class="text-red-500 text-sm pl-2">
+            {{ genreError }}
+          </p>
         </div>
+
+        <!-- File Picker -->
         <div class="flex flex-col flex-1 gap-2">
-          <label for="upload">Upload</label>
-          <!-- hidden actual file input -->
+          <label class="text-white pl-2" for="upload">Upload</label>
           <input
             ref="fileInput"
             id="upload"
             type="file"
             accept="audio/*"
             @change="onFileChange"
+            @blur="fileBlur"
             class="hidden"
           />
           <button
             @click="triggerFileDialog"
             type="button"
-            class="text-white text-lg font-bold py-2 px-8 rounded-xl bg-gray-700 flex-1"
+            class="inline-flex items-center py-2 px-8 bg-gray-700 rounded-xl font-bold text-lg text-white"
           >
             <font-awesome-icon
               :icon="['fas', 'upload']"
-              class="text-[#FFA900]"
+              class="text-[#FFA900] mr-2"
             />
             {{ fileName || "Select Song" }}
           </button>
+          <p v-if="fileError" class="text-red-500 text-sm pl-2">
+            {{ fileError }}
+          </p>
         </div>
       </div>
+
       <button
         type="submit"
-        class="self-start text-[#0E0E0F] text-md font-semibold py-3 px-12 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C]"
+        :disabled="!meta.valid || loading"
+        class="self-start text-[#0E0E0F] text-md font-semibold py-3 px-12 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C] disabled:opacity-50"
       >
-        UPLOAD SONG
+        <span v-if="loading">Uploading…</span>
+        <span v-else>UPLOAD SONG</span>
       </button>
     </Form>
   </section>
@@ -110,15 +129,14 @@ import { Form, useForm, useField } from "vee-validate";
 import * as yup from "yup";
 
 import { useUserStore } from "@/stores/user";
-
 const userStore = useUserStore();
 
-// const file = vueRef(null);
+// reactive refs
+const fileInput = vueRef(null);
 const fileName = vueRef("");
 const loading = vueRef(false);
-const fileInput = vueRef(null);
-// const fileError = vueRef("");
 
+// validation schema
 const schema = yup.object({
   songName: yup.string().required("Name is required"),
   genre: yup.string().required("Genre is required"),
@@ -128,28 +146,28 @@ const schema = yup.object({
     .test(
       "file-type",
       "Only audio files allowed",
-      (value) => value && value.type.startsWith("audio/")
+      (v) => v && v.type.startsWith("audio/")
     ),
 });
 
+// form setup
 const { handleSubmit, meta } = useForm({
   validationSchema: schema,
   validateOnBlur: true,
   validateOnChange: false,
 });
 
+// fields
 const {
   value: songName,
   errorMessage: songNameError,
   handleBlur: songNameBlur,
 } = useField("songName");
-
 const {
   value: genre,
   errorMessage: genreError,
   handleBlur: genreBlur,
 } = useField("genre");
-
 const {
   value: file,
   errorMessage: fileError,
@@ -157,32 +175,20 @@ const {
   handleBlur: fileBlur,
 } = useField("file");
 
-function onFileChange(e) {
-  const selected = e.target.files?.[0] ?? null;
-  file.value = selected;
-  fileName.value = selected.name;
-
-  schema
-    .validateAt("file", { ...meta.values, file: file.value })
-    .then(() => (fileError.value = ""))
-    .catch((err) => (fileError.value = err.message));
-}
-
+// handlers
 function triggerFileDialog() {
   fileInput.value?.click();
 }
+function onFileChange(e) {
+  const selected = e.target.files?.[0] ?? null;
+  setFile(selected);
+  fileName.value = selected?.name || "";
+}
 
+// submit
 const onSubmit = handleSubmit(async (values) => {
   loading.value = true;
   try {
-    // you have:
-    // - values.songName
-    // - values.genre
-    // - file.value
-    // - userStore.email / userStore.name
-
-    // 1) await uploadSong(file.value)
-    // 2) await saveSongMetadata({ ...values, url, artist: userStore.name })
     console.log("Ready to upload:", {
       ...values,
       file: file.value,
