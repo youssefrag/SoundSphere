@@ -47,48 +47,149 @@
     <div class="text-3xl font font-extrabold text-white mb-[40px]">
       Upload Your New Song 🔥
     </div>
-    <div class="flex justify-between gap-8 mb-8">
-      <div class="flex flex-col flex-1 gap-2">
-        <label class="text-white pl-2" for="songName">Song Name</label>
-        <input
-          id="songName"
-          type="text"
-          class="w-[100%] p-[10px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-sm font-semibold text-white placeholder-white rounded-2xl"
-        />
+    <Form @submit="onSubmit">
+      <div class="flex justify-between gap-8 mb-8">
+        <div class="flex flex-col flex-1 gap-2">
+          <label class="text-white pl-2" for="songName">Song Name</label>
+          <input
+            id="songName"
+            v-model="songName"
+            type="text"
+            class="w-[100%] p-[10px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-sm font-semibold text-white placeholder-white placeholder-white/30 rounded-2xl"
+            placeholder="Enter song name"
+          />
+        </div>
+        <div class="flex flex-col flex-1 gap-2">
+          <label class="text-white pl-2" for="genre">Genre</label>
+          <input
+            id="genre"
+            v-model="genre"
+            type="text"
+            class="w-[100%] p-[10px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-sm font-semibold text-white placeholder-white/30 placeholder-white rounded-2xl"
+            placeholder="e.g. Hip-Hop"
+          />
+        </div>
+        <div class="flex flex-col flex-1 gap-2">
+          <label for="upload">Upload</label>
+          <!-- hidden actual file input -->
+          <input
+            ref="fileInput"
+            id="upload"
+            type="file"
+            accept="audio/*"
+            @change="onFileChange"
+            class="hidden"
+          />
+          <button
+            @click="triggerFileDialog"
+            type="button"
+            class="text-white text-lg font-bold py-2 px-8 rounded-xl bg-gray-700 flex-1"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'upload']"
+              class="text-[#FFA900]"
+            />
+            {{ fileName || "Select Song" }}
+          </button>
+        </div>
       </div>
-      <div class="flex flex-col flex-1 gap-2">
-        <label class="text-white pl-2" for="genre">Genre</label>
-        <input
-          id="genre"
-          type="text"
-          class="w-[100%] p-[10px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-sm font-semibold text-white placeholder-white rounded-2xl"
-        />
-      </div>
-      <div class="flex flex-col flex-1 gap-2">
-        <label for="upload">Upload</label>
-        <button
-          type="button"
-          class="text-white text-lg font-bold py-2 px-8 rounded-xl bg-gray-700 flex-1"
-        >
-          <font-awesome-icon :icon="['fas', 'upload']" class="text-[#FFA900]" />
-          {{ fileName || "Select Song" }}
-        </button>
-      </div>
-    </div>
-    <button
-      class="self-start text-[#0E0E0F] text-md font-semibold py-3 px-12 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C]"
-    >
-      UPLOAD SONG
-    </button>
+      <button
+        type="submit"
+        class="self-start text-[#0E0E0F] text-md font-semibold py-3 px-12 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C]"
+      >
+        UPLOAD SONG
+      </button>
+    </Form>
   </section>
 </template>
 
 <script setup>
 import VLazyImage from "v-lazy-image";
+import { ref as vueRef } from "vue";
+import { Form, useForm, useField } from "vee-validate";
+import * as yup from "yup";
 
 import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
 
-console.log(userStore.imageUrl);
+// const file = vueRef(null);
+const fileName = vueRef("");
+const loading = vueRef(false);
+const fileInput = vueRef(null);
+// const fileError = vueRef("");
+
+const schema = yup.object({
+  songName: yup.string().required("Name is required"),
+  genre: yup.string().required("Genre is required"),
+  file: yup
+    .mixed()
+    .required("Please select a file")
+    .test(
+      "file-type",
+      "Only audio files allowed",
+      (value) => value && value.type.startsWith("audio/")
+    ),
+});
+
+const { handleSubmit, meta } = useForm({
+  validationSchema: schema,
+  validateOnBlur: true,
+  validateOnChange: false,
+});
+
+const {
+  value: songName,
+  errorMessage: songNameError,
+  handleBlur: songNameBlur,
+} = useField("songName");
+
+const {
+  value: genre,
+  errorMessage: genreError,
+  handleBlur: genreBlur,
+} = useField("genre");
+
+const {
+  value: file,
+  errorMessage: fileError,
+  setValue: setFile,
+  handleBlur: fileBlur,
+} = useField("file");
+
+function onFileChange(e) {
+  const selected = e.target.files?.[0] ?? null;
+  file.value = selected;
+  fileName.value = selected.name;
+
+  schema
+    .validateAt("file", { ...meta.values, file: file.value })
+    .then(() => (fileError.value = ""))
+    .catch((err) => (fileError.value = err.message));
+}
+
+function triggerFileDialog() {
+  fileInput.value?.click();
+}
+
+const onSubmit = handleSubmit(async (values) => {
+  loading.value = true;
+  try {
+    // you have:
+    // - values.songName
+    // - values.genre
+    // - file.value
+    // - userStore.email / userStore.name
+
+    // 1) await uploadSong(file.value)
+    // 2) await saveSongMetadata({ ...values, url, artist: userStore.name })
+    console.log("Ready to upload:", {
+      ...values,
+      file: file.value,
+      artist: userStore.name,
+    });
+  } finally {
+    loading.value = false;
+  }
+});
 </script>

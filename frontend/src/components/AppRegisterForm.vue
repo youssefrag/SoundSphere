@@ -97,7 +97,6 @@
 import { ref as vueRef } from "vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import api from "@/api";
 
 import { useModalStore } from "@/stores/modal";
 import { useUserStore } from "@/stores/user";
