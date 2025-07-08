@@ -11,6 +11,7 @@ import {
   faComment,
   faMusic,
   faCalendar,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -23,7 +24,8 @@ library.add(
   faPlay,
   faComment,
   faMusic,
-  faCalendar
+  faCalendar,
+  faCheck
 );
 
 export default FontAwesomeIcon;
