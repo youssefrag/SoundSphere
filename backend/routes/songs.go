@@ -5,7 +5,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/youssefrag/SoundSphere/cache"
 	"github.com/youssefrag/SoundSphere/models"
+)
+
+const (
+  allSongsKey     = "songs:all"
 )
 
 func saveSongHandler(context *gin.Context) {
@@ -36,6 +41,8 @@ func saveSongHandler(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not save song."})
 		return
 	}
+
+	cache.Client.Del(cache.Ctx, allSongsKey)
 	
 	context.JSON(http.StatusCreated, gin.H{"message": "Song saved successfully."})
 	

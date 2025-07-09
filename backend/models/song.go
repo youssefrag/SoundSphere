@@ -2,8 +2,11 @@ package models
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"time"
 
+	"github.com/youssefrag/SoundSphere/cache"
 	"github.com/youssefrag/SoundSphere/db"
 )
 
@@ -22,6 +25,12 @@ type ArtistWithSongs struct {
   ImageUrl  string `json:"imageUrl"`
   Songs     []Song `json:"songs"`
 }
+
+// Redis cache keys & TTL for songs
+const (
+  allSongsKey    = "songs:all"
+  cacheTTL        = 5 * time.Minute
+)
 
 func (s *Song) Save() error {
 
@@ -58,7 +67,20 @@ func (s *Song) Save() error {
 
 func GetAllSongs() ([]ArtistWithSongs, error) {
 
-	fmt.Println("🔵 Entering GetAllSongs()")
+	ctx := cache.Ctx
+
+	// Try Redic cache
+
+	if blob, err := cache.Client.Get(ctx, allSongsKey).Result(); err == nil {
+		var list []ArtistWithSongs
+		if err := json.Unmarshal([]byte(blob), &list); err == nil {
+			fmt.Println("✅ Cache hit for all songs")
+			return list, nil
+		}
+	}
+
+	// Cache Miss
+	fmt.Println("🔵 Cache miss — loading all songs from DB")
 	
 	const query = `
 		SELECT
@@ -111,7 +133,6 @@ func GetAllSongs() ([]ArtistWithSongs, error) {
 			&song.Duration,
 			&song.SongUrl,
 		); err != nil {
-			fmt.Println("🔴 scan grouped song row error:", err)
 			return nil, fmt.Errorf("scan grouped song row: %w", err)
 		}
 
@@ -131,26 +152,25 @@ func GetAllSongs() ([]ArtistWithSongs, error) {
 			}
 
 			order = append(order, artistEmail)
-			fmt.Println("🟡 New artist:", artistEmail, "order so far:", order)
 		}
 		
 		groups[artistEmail].Songs = append(groups[artistEmail].Songs, song)
-		fmt.Println("🟡 Appended song for", artistEmail, "total songs:", len(groups[artistEmail].Songs))
 	}
 
 	if iterErr := rows.Err(); iterErr != nil {
-		fmt.Println("⚠️ rows.Err() was non-nil:", iterErr)
 		return nil, fmt.Errorf("rows iteration error: %w", iterErr)
 }
-
-	fmt.Println("🔵 Finished loop. Artists grouped:", len(order))
 
   result := make([]ArtistWithSongs, 0, len(order))
   for _, email := range order {
     result = append(result, *groups[email])
   }
 
-	fmt.Println("🔵 Returning", len(result), "ArtistWithSongs structs")
+	// Save to cache
+	if blob, err := json.Marshal(result); err == nil {
+		cache.Client.Set(ctx, allSongsKey, blob, cacheTTL)
+	}
+
   return result, nil
 }
 

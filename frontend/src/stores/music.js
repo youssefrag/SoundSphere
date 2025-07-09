@@ -16,7 +16,7 @@ export const useMusicStore = defineStore("music", () => {
   });
 
   async function saveSong(name, genre, artist, songUrl, duration) {
-    const response = await api.post("/saveSong", {
+    await api.post("/saveSong", {
       name,
       genre,
       artistEmail: artist,
@@ -24,7 +24,7 @@ export const useMusicStore = defineStore("music", () => {
       duration,
     });
 
-    console.log(response);
+    await fetchAllArtists();
   }
 
   async function fetchAllArtists() {
