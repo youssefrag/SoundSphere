@@ -129,6 +129,7 @@ import { Form, useForm, useField } from "vee-validate";
 import * as yup from "yup";
 
 import { useUserStore } from "@/stores/user";
+import { storage, storageRef, uploadBytesToPath, getURL } from "@/firebase";
 const userStore = useUserStore();
 
 // reactive refs
@@ -185,15 +186,29 @@ function onFileChange(e) {
   fileName.value = selected?.name || "";
 }
 
+async function uploadSong(file) {
+  const path = `songs/${userStore.email}/${file.name}`;
+  const songRef = storageRef(storage, path);
+  await uploadBytesToPath(songRef, file);
+  return await getURL(songRef);
+}
+
 // submit
 const onSubmit = handleSubmit(async (values) => {
   loading.value = true;
   try {
-    console.log("Ready to upload:", {
-      ...values,
-      file: file.value,
-      artist: userStore.name,
-    });
+    const songUrl = await uploadSong(file.value);
+
+    console.log(songUrl);
+
+    // console.log("Ready to upload:", {
+    //   ...values,
+    //   file: file.value,
+    //   artist: userStore.name,
+    // });
+  } catch {
+    console.error(err);
+    alert("Song upload failed: " + (err.response?.data?.error || err.message));
   } finally {
     loading.value = false;
   }
