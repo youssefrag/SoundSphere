@@ -1,15 +1,19 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import api from "@/api";
 import { useUserStore } from "./user";
 
 export const useMusicStore = defineStore("music", () => {
   const allArtists = ref([]);
-  const userSongs = ref([]);
   const loading = ref(false);
   const error = ref(null);
 
   const userStore = useUserStore();
+
+  const userSongs = computed(() => {
+    const bucket = allArtists.value.find((a) => a.email === userStore.email);
+    return bucket ? bucket.songs : [];
+  });
 
   async function saveSong(name, genre, artist, songUrl, duration) {
     const response = await api.post("/saveSong", {
