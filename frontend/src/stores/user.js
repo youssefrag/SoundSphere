@@ -1,81 +1,85 @@
+// src/stores/user.js
 import { defineStore } from "pinia";
+import { ref } from "vue";
 import api from "@/api";
 
-export const useUserStore = defineStore("user", {
-  state: () => ({
-    accessToken: null,
-    name: null,
-    email: null,
-    imageUrl: null,
-  }),
-  actions: {
-    clearSession() {
-      this.accessToken = null;
-      this.name = null;
-      this.email = null;
-      this.imageUrl = null;
-      delete api.defaults.headers.common.Authorization;
-    },
+export const useUserStore = defineStore("user", () => {
+  const accessToken = ref(null);
+  const name = ref(null);
+  const email = ref(null);
+  const imageUrl = ref(null);
 
-    async register(name, email, password, avatarUrl) {
-      try {
-        const response = await api.post("/signup", {
-          name,
-          email,
-          password,
-          imageUrl: avatarUrl,
-        });
+  function clearSession() {
+    accessToken.value = null;
+    name.value = null;
+    email.value = null;
+    imageUrl.value = null;
+    delete api.defaults.headers.common.Authorization;
+  }
 
-        if (response.status === 201) {
-          this.login(email, password);
-        }
-      } catch (error) {
-        if (error.status) {
-          alert("Email already in use");
-        }
+  async function register(userName, userEmail, password, avatarUrl) {
+    try {
+      const res = await api.post("/signup", {
+        name: userName,
+        email: userEmail,
+        password,
+        imageUrl: avatarUrl,
+      });
+      if (res.status === 201) {
+        await login(userEmail, password);
       }
-    },
+    } catch (err) {
+      alert(
+        err.response?.status === 409
+          ? "Email already in use"
+          : "Registration failed"
+      );
+    }
+  }
 
-    async login(email, password) {
-      const { data } = await api.post("/login", { email, password });
+  async function login(userEmail, password) {
+    const { data } = await api.post("/login", { email: userEmail, password });
+    accessToken.value = data.token;
+    email.value = data.user.email;
+    name.value = data.user.name;
+    imageUrl.value = data.user.imageUrl;
+    api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+  }
 
-      console.log(data);
+  async function logout() {
+    try {
+      await api.post("/logout", {}, { withCredentials: true });
+    } catch (err) {
+      console.warn("could not revoke refresh token", err);
+    } finally {
+      clearSession();
+      window.location.reload(false);
+    }
+  }
 
-      this.accessToken = data.token;
-      this.email = data.user.email;
-      this.name = data.user.name;
-      this.imageUrl = data.user.imageUrl;
+  async function refresh() {
+    try {
+      const { data } = await api.post("/refresh");
+      accessToken.value = data.token ?? data.access_token;
+      email.value = data.user.email;
+      name.value = data.user.name;
+      imageUrl.value = data.user.imageUrl;
+      api.defaults.headers.common.Authorization = `Bearer ${accessToken.value}`;
+    } catch {
+      clearSession();
+    }
+  }
 
-      api.defaults.headers.common.Authorization = `Bearer ${this.accessToken}`;
-    },
+  return {
+    accessToken,
+    name,
+    email,
+    imageUrl,
 
-    async logout() {
-      console.log("reached here");
-      try {
-        await api.post("/logout", {}, { withCredentials: true });
-      } catch (error) {
-        console.warn("could not revode refresh token", error);
-      } finally {
-        this.clearSession();
-        window.location.reload(false);
-      }
-    },
-
-    async refresh() {
-      try {
-        const { data } = await api.post("/refresh");
-
-        this.accessToken = data.token ?? data.access_token;
-        this.email = data.user.email;
-        this.name = data.user.name;
-        this.imageUrl = data.user.imageUrl;
-
-        console.log(data);
-
-        api.defaults.headers.common.Authorization = `Bearer ${this.accessToken}`;
-      } catch (error) {
-        this.clearSession();
-      }
-    },
-  },
+    clearSession,
+    register,
+    login,
+    logout,
+    refresh,
+  };
 });

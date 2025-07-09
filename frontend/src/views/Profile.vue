@@ -155,7 +155,7 @@ const schema = yup.object({
 });
 
 // form setup
-const { handleSubmit, meta } = useForm({
+const { handleSubmit, resetForm, meta } = useForm({
   validationSchema: schema,
   validateOnBlur: true,
   validateOnChange: false,
@@ -233,6 +233,16 @@ const onSubmit = handleSubmit(async (values) => {
   } catch (err) {
     console.log("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴", err);
   } finally {
+    resetForm({
+      values: {
+        songName: "",
+        genre: "",
+        file: null,
+      },
+    });
+
+    fileName.value = "";
+
     loading.value = false;
   }
 });
