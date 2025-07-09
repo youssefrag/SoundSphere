@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
+import api from "@/api";
 
-export default defineStore("music", {
+export const useMusicStore = defineStore("music", {
   state: () => ({
     music: [
       {
@@ -206,4 +207,16 @@ export default defineStore("music", {
       },
     ],
   }),
+  actions: {
+    async saveSong(name, genre, artist, songUrl) {
+      const response = await api.post("/saveSong", {
+        name,
+        genre,
+        artistEmail: artist,
+        songUrl,
+      });
+
+      console.log(response);
+    },
+  },
 });

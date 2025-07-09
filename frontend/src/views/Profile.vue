@@ -129,8 +129,11 @@ import { Form, useForm, useField } from "vee-validate";
 import * as yup from "yup";
 
 import { useUserStore } from "@/stores/user";
+import { useMusicStore } from "@/stores/music";
 import { storage, storageRef, uploadBytesToPath, getURL } from "@/firebase";
+
 const userStore = useUserStore();
+const musicStore = useMusicStore();
 
 // reactive refs
 const fileInput = vueRef(null);
@@ -196,19 +199,18 @@ async function uploadSong(file) {
 // submit
 const onSubmit = handleSubmit(async (values) => {
   loading.value = true;
+
   try {
     const songUrl = await uploadSong(file.value);
 
-    console.log(songUrl);
-
-    // console.log("Ready to upload:", {
-    //   ...values,
-    //   file: file.value,
-    //   artist: userStore.name,
-    // });
-  } catch {
-    console.error(err);
-    alert("Song upload failed: " + (err.response?.data?.error || err.message));
+    musicStore.saveSong(
+      values.songName,
+      values.genre,
+      userStore.email,
+      songUrl
+    );
+  } catch (err) {
+    console.log("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴", err);
   } finally {
     loading.value = false;
   }

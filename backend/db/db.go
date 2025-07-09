@@ -54,11 +54,11 @@ func InitDB() {
 func createTables() {
 	createUsersTable := `
 		CREATE TABLE IF NOT EXISTS users (
-			id SERIAL PRIMARY KEY,
-			name TEXT NOT NULL,
-			email TEXT NOT NULL UNIQUE,
-			password TEXT NOT NULL,
-			imageUrl TEXT
+			id 					SERIAL PRIMARY KEY,
+			name 				TEXT NOT NULL,
+			email 			TEXT NOT NULL UNIQUE,
+			password 		TEXT NOT NULL,
+			imageUrl 		TEXT
 		)
 	`
 
@@ -88,5 +88,24 @@ func createTables() {
   }
 
   fmt.Println("Refresh_tokens table created! ✅")
+
+	createSongsTable := `
+		CREATE TABLE IF NOT EXISTS songs (
+			id 						SERIAL PRIMARY KEY,
+			name 					VARCHAR(100) NOT NULL,
+			genre 				VARCHAR(50) NOT NULL,
+			artist_id 		BIGINT REFERENCES users(id) ON DELETE CASCADE,
+			song_url     	TEXT          NOT NULL,
+			uploaded_at  	TIMESTAMPTZ NOT NULL DEFAULT now()
+		)
+	`
+
+	if _, err := DB.Exec(createSongsTable); err != nil {
+    // include the real error so you can see what's wrong
+    panic(fmt.Sprintf("Could not create refresh_tokens table: %v", err))
+  }
+
+	fmt.Println("Songs table created! ✅")
+
 }
 

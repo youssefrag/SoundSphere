@@ -62,7 +62,7 @@
 import { useScroll } from "@vueuse/core";
 import { useTemplateRef } from "vue";
 
-import useMusicStore from "@/stores/music";
+import { useMusicStore } from "@/stores/music";
 import ArtistCard from "@/components/ArtistCard.vue";
 
 let { music } = useMusicStore();

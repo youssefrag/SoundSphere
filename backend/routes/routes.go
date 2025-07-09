@@ -9,4 +9,6 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/login", login)
 	server.POST("/refresh", refresh)
 	server.POST("/logout", logout)
+
+	server.POST("/saveSong", saveSong)
 }
