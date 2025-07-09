@@ -8,7 +8,7 @@ import (
 	"github.com/youssefrag/SoundSphere/models"
 )
 
-func saveSong(context *gin.Context) {
+func saveSongHandler(context *gin.Context) {
 
 	var song models.Song
 
@@ -39,4 +39,14 @@ func saveSong(context *gin.Context) {
 	
 	context.JSON(http.StatusCreated, gin.H{"message": "Song saved successfully."})
 	
+}
+
+func getAllSongsHandler(context *gin.Context) {
+	songs, err := models.GetAllSongs()
+	
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+    return
+	}
+	context.JSON(http.StatusOK, songs)
 }

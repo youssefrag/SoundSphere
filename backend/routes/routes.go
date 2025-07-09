@@ -10,5 +10,6 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/refresh", refresh)
 	server.POST("/logout", logout)
 
-	server.POST("/saveSong", saveSong)
+	server.POST("/saveSong", saveSongHandler)
+	server.GET("/allSongs", getAllSongsHandler)
 }
