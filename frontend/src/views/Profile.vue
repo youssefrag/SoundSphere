@@ -196,9 +196,29 @@ async function uploadSong(file) {
   return await getURL(songRef);
 }
 
+function getAudioDuration(file) {
+  return new Promise((resolve, reject) => {
+    const audio = document.createElement("audio");
+    audio.preload = "metadata";
+
+    audio.onloadedmetadata = () => {
+      URL.revokeObjectURL(audio.src);
+      const seconds = Math.floor(audio.duration);
+      resolve(seconds);
+    };
+    audio.onerror = (e) => reject(e);
+
+    audio.src = URL.createObjectURL(file);
+  });
+}
+
 // submit
 const onSubmit = handleSubmit(async (values) => {
   loading.value = true;
+
+  const duration = await getAudioDuration(file.value);
+
+  console.log({ duration });
 
   try {
     const songUrl = await uploadSong(file.value);
@@ -207,7 +227,8 @@ const onSubmit = handleSubmit(async (values) => {
       values.songName,
       values.genre,
       userStore.email,
-      songUrl
+      songUrl,
+      duration
     );
   } catch (err) {
     console.log("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴", err);

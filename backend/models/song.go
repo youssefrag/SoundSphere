@@ -11,6 +11,7 @@ type Song struct {
 	Name string        `json:"name"        binding:"required"`
 	ArtistEmail string `json:"artistEmail" binding:"required"`
 	Genre string       `json:"genre"       binding:"required"`
+	Duration int       `json:"duration"       binding:"required"`
 	SongUrl string     `json:"songUrl"     binding:"required"`
 }
 
@@ -20,12 +21,13 @@ func (s *Song) Save() error {
 	// fmt.Println(err)
 	
 	const query = `
-			INSERT INTO songs (name, genre, artist_id, song_url)
+			INSERT INTO songs (name, genre, artist_id, duration, song_url)
 			VALUES (
 				$1, 
 				$2, 
 				(SELECT id FROM users WHERE email = $3), 
-				$4
+				$4,
+				$5
 			)
 			RETURNING id
 	`
@@ -36,6 +38,7 @@ func (s *Song) Save() error {
 			s.Name,
 			s.Genre,
 			s.ArtistEmail,
+			s.Duration,
 			s.SongUrl,
 	).Scan(&s.ID)
 	if err != nil {

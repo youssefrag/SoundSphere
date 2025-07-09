@@ -208,12 +208,13 @@ export const useMusicStore = defineStore("music", {
     ],
   }),
   actions: {
-    async saveSong(name, genre, artist, songUrl) {
+    async saveSong(name, genre, artist, songUrl, duration) {
       const response = await api.post("/saveSong", {
         name,
         genre,
         artistEmail: artist,
         songUrl,
+        duration,
       });
 
       console.log(response);

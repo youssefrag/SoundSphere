@@ -96,6 +96,7 @@ func createTables() {
 			genre 				VARCHAR(50) NOT NULL,
 			artist_id 		BIGINT REFERENCES users(id) ON DELETE CASCADE,
 			song_url     	TEXT          NOT NULL,
+			duration 			INT NOT NULL,
 			uploaded_at  	TIMESTAMPTZ NOT NULL DEFAULT now()
 		)
 	`
