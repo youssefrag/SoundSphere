@@ -178,5 +178,21 @@ func GetAllSongs() ([]ArtistWithSongs, error) {
   return result, nil
 }
 
-func deleteSong(songId int64)  {}
-// func deleteSong(songId int64) (fileName string, err error) {}
+func DeleteSong(songId int64)(string, error) {
+
+	const query = `
+		DELETE FROM songs
+		WHERE id = $1
+		RETURNING storage_path;
+	`
+
+	var storagePath string
+
+	err := db.DB.QueryRow(query, songId).Scan(&storagePath)
+
+	if err != nil {
+		return "", fmt.Errorf("could not delete song %d: %w", songId, err)
+	}
+
+	return storagePath, nil
+}

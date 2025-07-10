@@ -54,14 +54,25 @@ func getAllSongsHandler(context *gin.Context) {
 func deleteSongsHandler(context * gin.Context) {
 	songIdStr := context.Param("songId")
 
-
-	fmt.Println("🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣", songIdStr)
-
-	songID, err := strconv.ParseInt(songIdStr, 10, 64)
+	songId, err := strconv.ParseInt(songIdStr, 10, 64)
   if err != nil {
     context.JSON(http.StatusBadRequest, gin.H{"error": "invalid song ID"})
     return
   }
 
-	fmt.Println(songID)
+	fmt.Println(songId)
+
+	storagePath, err := models.DeleteSong(songId)
+
+	if err != nil {
+    context.JSON(http.StatusBadRequest, gin.H{"error": "could not delete song"})
+    return
+  }
+
+	cache.Client.Del(cache.Ctx, allSongsKey)
+
+	context.JSON(http.StatusOK, gin.H{
+		"message":      "song deleted",
+		"storage_path": storagePath,
+})
 }

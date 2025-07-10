@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { getStorage, ref as storageRef, deleteObject } from "firebase/storage";
+
 import api from "@/api";
 import { useUserStore } from "./user";
 
@@ -43,9 +45,21 @@ export const useMusicStore = defineStore("music", () => {
   }
 
   async function deleteSong(songId) {
+    error.value = null;
+
     try {
       const { data } = await api.delete(`songs/${songId}`);
-    } catch (err) {}
+
+      const { storage_path: storagePath } = data;
+
+      const storage = getStorage();
+      const fileRef = storageRef(storage, storagePath);
+      await deleteObject(fileRef);
+    } catch (err) {
+      error.value = err;
+    } finally {
+      fetchAllArtists();
+    }
   }
 
   fetchAllArtists();
