@@ -17,7 +17,7 @@ type Song struct {
 	Genre string       `json:"genre"       binding:"required"`
 	Duration int64     `json:"duration"       binding:"required"`
 	SongUrl string     `json:"songUrl"     binding:"required"`
-	StoragePath string `json:"storagePath" binding:required`
+	StoragePath string `json:"storagePath,,omitempty" binding:required`
 
 }
 

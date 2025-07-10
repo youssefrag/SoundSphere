@@ -246,6 +246,10 @@ const onSubmit = handleSubmit(async (values) => {
 
     fileName.value = "";
 
+    if (fileInput.value) {
+      fileInput.value.value = null;
+    }
+
     loading.value = false;
   }
 });
