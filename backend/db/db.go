@@ -97,6 +97,7 @@ func createTables() {
 			artist_id 		BIGINT REFERENCES users(id) ON DELETE CASCADE,
 			song_url     	TEXT          NOT NULL,
 			duration 			INT NOT NULL,
+			storage_path 	VARCHAR(100) NOT NULL,
 			uploaded_at  	TIMESTAMPTZ NOT NULL DEFAULT now()
 		)
 	`

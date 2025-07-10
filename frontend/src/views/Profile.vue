@@ -120,6 +120,7 @@
       </button>
     </Form>
   </section>
+  <UserSongs />
 </template>
 
 <script setup>
@@ -131,6 +132,7 @@ import * as yup from "yup";
 import { useUserStore } from "@/stores/user";
 import { useMusicStore } from "@/stores/music";
 import { storage, storageRef, uploadBytesToPath, getURL } from "@/firebase";
+import UserSongs from "@/components/UserSongs.vue";
 
 const userStore = useUserStore();
 const musicStore = useMusicStore();
@@ -193,7 +195,9 @@ async function uploadSong(file) {
   const path = `songs/${userStore.email}/${file.name}`;
   const songRef = storageRef(storage, path);
   await uploadBytesToPath(songRef, file);
-  return await getURL(songRef);
+
+  const url = await getURL(songRef);
+  return { url, path };
 }
 
 function getAudioDuration(file) {
@@ -218,17 +222,16 @@ const onSubmit = handleSubmit(async (values) => {
 
   const duration = await getAudioDuration(file.value);
 
-  console.log({ duration });
-
   try {
-    const songUrl = await uploadSong(file.value);
+    const { url: songUrl, path: storagePath } = await uploadSong(file.value);
 
     musicStore.saveSong(
       values.songName,
       values.genre,
       userStore.email,
       songUrl,
-      duration
+      duration,
+      storagePath
     );
   } catch (err) {
     console.log("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴", err);

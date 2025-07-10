@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/youssefrag/SoundSphere/cache"
@@ -16,22 +17,14 @@ const (
 func saveSongHandler(context *gin.Context) {
 
 	var song models.Song
-
 	
 	err := context.ShouldBindJSON(&song)
 
-	fmt.Println(song)
-
-	fmt.Println("🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢")
-
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
-		fmt.Println("🔴🔴🔴🔴🔴🔴🔴", err)
+
 		return
 	}
-
-	fmt.Println("🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣")
-
 
 	err = song.Save()
 
@@ -56,4 +49,19 @@ func getAllSongsHandler(context *gin.Context) {
     return
 	}
 	context.JSON(http.StatusOK, songs)
+}
+
+func deleteSongsHandler(context * gin.Context) {
+	songIdStr := context.Param("songId")
+
+
+	fmt.Println("🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣", songIdStr)
+
+	songID, err := strconv.ParseInt(songIdStr, 10, 64)
+  if err != nil {
+    context.JSON(http.StatusBadRequest, gin.H{"error": "invalid song ID"})
+    return
+  }
+
+	fmt.Println(songID)
 }

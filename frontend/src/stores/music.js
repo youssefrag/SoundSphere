@@ -15,13 +15,14 @@ export const useMusicStore = defineStore("music", () => {
     return bucket ? bucket.songs : [];
   });
 
-  async function saveSong(name, genre, artist, songUrl, duration) {
+  async function saveSong(name, genre, artist, songUrl, duration, storagePath) {
     await api.post("/saveSong", {
       name,
       genre,
       artistEmail: artist,
       songUrl,
       duration,
+      storagePath,
     });
 
     await fetchAllArtists();
@@ -39,8 +40,12 @@ export const useMusicStore = defineStore("music", () => {
     } finally {
       loading.value = false;
     }
+  }
 
-    console.log(allArtists.value);
+  async function deleteSong(songId) {
+    try {
+      const { data } = await api.delete(`songs/${songId}`);
+    } catch (err) {}
   }
 
   fetchAllArtists();
@@ -52,5 +57,6 @@ export const useMusicStore = defineStore("music", () => {
     error,
     saveSong,
     fetchAllArtists,
+    deleteSong,
   };
 });

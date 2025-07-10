@@ -17,6 +17,8 @@ type Song struct {
 	Genre string       `json:"genre"       binding:"required"`
 	Duration int64     `json:"duration"       binding:"required"`
 	SongUrl string     `json:"songUrl"     binding:"required"`
+	StoragePath string `json:"storagePath" binding:required`
+
 }
 
 type ArtistWithSongs struct {
@@ -38,13 +40,14 @@ func (s *Song) Save() error {
 	// fmt.Println(err)
 	
 	const query = `
-			INSERT INTO songs (name, genre, artist_id, duration, song_url)
+			INSERT INTO songs (name, genre, artist_id, duration, song_url, storage_path)
 			VALUES (
 				$1, 
 				$2, 
 				(SELECT id FROM users WHERE email = $3), 
 				$4,
-				$5
+				$5,
+				$6
 			)
 			RETURNING id
 	`
@@ -57,6 +60,7 @@ func (s *Song) Save() error {
 			s.ArtistEmail,
 			s.Duration,
 			s.SongUrl,
+			s.StoragePath,
 	).Scan(&s.ID)
 	if err != nil {
 			return fmt.Errorf("saving song: %w", err)
@@ -174,3 +178,5 @@ func GetAllSongs() ([]ArtistWithSongs, error) {
   return result, nil
 }
 
+func deleteSong(songId int64)  {}
+// func deleteSong(songId int64) (fileName string, err error) {}
