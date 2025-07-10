@@ -68,6 +68,8 @@
 
 <script setup>
 import { onMounted, reactive, nextTick } from "vue";
+
+import api from "@/api";
 import { useMusicStore } from "@/stores/music";
 import { formatDuration } from "../utilities/helpers";
 
@@ -105,12 +107,12 @@ async function saveSong(songId, originalName, originalGenre) {
     }
 
     // call your update endpoint
-    // await api.put(`/songs/${songId}`, { name, genre });
+    await api.put(`/songs/${songId}`, { name, genre });
     // re-fetch so the store (and UI) is in sync
-    // await musicStore.fetchAllArtists();
   } catch (err) {
     console.error("could not save song:", err);
   } finally {
+    await musicStore.fetchAllArtists();
     // always exit edit mode
     editing[songId] = false;
   }

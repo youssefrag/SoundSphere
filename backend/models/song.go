@@ -35,9 +35,6 @@ const (
 )
 
 func (s *Song) Save() error {
-
-	fmt.Println("🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣")
-	// fmt.Println(err)
 	
 	const query = `
 			INSERT INTO songs (name, genre, artist_id, duration, song_url, storage_path)
@@ -195,4 +192,21 @@ func DeleteSong(songId int64)(string, error) {
 	}
 
 	return storagePath, nil
+}
+
+func EditSong(songId int64, name string, genre string) error {
+
+	const query = `
+		UPDATE songs
+			SET name = $1,
+					genre = $2
+		WHERE id = $3
+	`
+	_, err := db.DB.Exec(query, name, genre, songId)
+  if err != nil {
+    return fmt.Errorf("could not update song %d: %w", songId, err)
+  }
+
+	return nil
+
 }

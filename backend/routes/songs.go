@@ -14,6 +14,11 @@ const (
   allSongsKey     = "songs:all"
 )
 
+type editSongRequest struct {
+	Name  string `json:"name"`
+	Genre string `json:"genre"`
+}
+
 func saveSongHandler(context *gin.Context) {
 
 	var song models.Song
@@ -74,5 +79,34 @@ func deleteSongsHandler(context * gin.Context) {
 	context.JSON(http.StatusOK, gin.H{
 		"message":      "song deleted",
 		"storage_path": storagePath,
-})
+	})
+}
+
+func editSongHandler(context * gin.Context) {
+	songIdStr := context.Param("songId")
+
+	songId, err := strconv.ParseInt(songIdStr, 10, 64)
+
+  if err != nil {
+    context.JSON(http.StatusBadRequest, gin.H{"error": "invalid song ID"})
+    return
+  }
+
+	var req editSongRequest
+	if err := context.ShouldBindJSON(&req); err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+	}
+
+	err = models.EditSong(songId, req.Name, req.Genre)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "could not edit song"})
+	}
+
+	cache.Client.Del(cache.Ctx, allSongsKey)
+
+	context.JSON(http.StatusOK, gin.H{
+		"message": "edit succesful",
+	})
 }
