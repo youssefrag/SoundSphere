@@ -15,10 +15,12 @@
             <input
               v-model="editValues[song.id].name"
               :ref="(el) => (nameInputs[song.id] = el)"
+              @keyup.enter.prevent="saveSong(song.id, song.name, song.genre)"
               class="bg-transparent border-b border-gray-400 text-white text-xl font-bold pb-1 focus:outline-none"
             />
             <input
               v-model="editValues[song.id].genre"
+              @keyup.enter.prevent="saveSong(song.id, song.name, song.genre)"
               class="bg-transparent border-b border-gray-400 text-[#7D72FF] text-md font-semibold pb-1 focus:outline-none"
             />
           </div>
@@ -59,6 +61,14 @@
                 "
               />
             </div>
+            <div
+              class="group bg-gray-800 rounded-full h-[36px] w-[36px] flex items-center justify-center hover:bg-white transition-colors duration-200 cursor-pointer"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'comment']"
+                class="text-[#4636FF]/80 group-hover:text-[#382BCC] transition-colors duration-200"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -97,24 +107,14 @@ function startEdit(song) {
 }
 
 async function saveSong(songId, originalName, originalGenre) {
-  try {
-    const { name, genre } = editValues[songId];
+  const { name, genre } = editValues[songId];
 
-    console.log({ name, genre, originalName, originalGenre });
-
-    if (name === originalName && genre === originalGenre) {
-      return;
-    }
-
-    // call your update endpoint
-    await api.put(`/songs/${songId}`, { name, genre });
-    // re-fetch so the store (and UI) is in sync
-  } catch (err) {
-    console.error("could not save song:", err);
-  } finally {
-    await musicStore.fetchAllArtists();
-    // always exit edit mode
-    editing[songId] = false;
+  if (name === originalName && genre === originalGenre) {
+    return;
   }
+
+  await musicStore.editSong(songId, name, genre);
+
+  editing[songId] = false;
 }
 </script>

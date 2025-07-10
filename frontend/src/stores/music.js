@@ -58,7 +58,17 @@ export const useMusicStore = defineStore("music", () => {
     } catch (err) {
       error.value = err;
     } finally {
-      fetchAllArtists();
+      await fetchAllArtists();
+    }
+  }
+
+  async function editSong(songId, name, genre) {
+    try {
+      await api.put(`/songs/${songId}`, { name, genre });
+    } catch (err) {
+      error.value = err;
+    } finally {
+      await fetchAllArtists();
     }
   }
 
@@ -72,5 +82,6 @@ export const useMusicStore = defineStore("music", () => {
     saveSong,
     fetchAllArtists,
     deleteSong,
+    editSong,
   };
 });
