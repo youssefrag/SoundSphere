@@ -120,12 +120,14 @@
       </button>
     </Form>
   </section>
-  <UserSongs />
+  <div ref="songsSection">
+    <UserSongs />
+  </div>
 </template>
 
 <script setup>
 import VLazyImage from "v-lazy-image";
-import { ref as vueRef } from "vue";
+import { ref as vueRef, nextTick } from "vue";
 import { Form, useForm, useField } from "vee-validate";
 import * as yup from "yup";
 
@@ -141,6 +143,8 @@ const musicStore = useMusicStore();
 const fileInput = vueRef(null);
 const fileName = vueRef("");
 const loading = vueRef(false);
+
+const songsSection = vueRef(null);
 
 // validation schema
 const schema = yup.object({
@@ -251,6 +255,14 @@ const onSubmit = handleSubmit(async (values) => {
     }
 
     loading.value = false;
+
+    await nextTick();
+    // then scroll!
+    songsSection.value?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
   }
 });
 </script>
