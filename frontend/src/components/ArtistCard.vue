@@ -13,10 +13,8 @@
       <div class="flex items-center gap-5">
         <div
           class="bg-[#fff] h-[80px] w-[80px] opacity-100 bg-cover bg-center rounded-xl"
-          :class="{
-            'bg-[url(@/assets/images/artist1.jpeg)]': index % 3 == 0,
-            'bg-[url(@/assets/images/artist2.jpeg)]': index % 3 == 1,
-            'bg-[url(@/assets/images/artist3.jpeg)]': index % 3 == 2,
+          :style="{
+            backgroundImage: `url(${artist.imageUrl || DEFAULT_AVATAR})`,
           }"
         ></div>
         <div class="text-white text-xl font-bold">{{ artist.name }}</div>
@@ -33,7 +31,9 @@
           >{{ song.name }}</router-link
         >
         <div class="flex items-center gap-3">
-          <div class="text-white font-bold">{{ song.duration }}</div>
+          <div class="text-white font-bold">
+            {{ formatDuration(song.duration) }}
+          </div>
 
           <div
             class="h-[36px] w-[36px] bg-gray-800 opacity-100 flex justify-center items-center rounded-full"
@@ -59,6 +59,12 @@
 </template>
 
 <script setup>
+import { formatDuration } from "@/utilities/helpers";
 const { artist, index } = defineProps(["index", "artist"]);
+
+const DEFAULT_AVATAR =
+  "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+console.log(artist);
+
 const { songs } = artist;
 </script>

@@ -36,7 +36,7 @@
       <div class="flex items-center h-[30rem] px-10 gap-8">
         <font-awesome-icon
           :icon="['fas', 'arrow-left']"
-          class="text-[#FFA900] text-4xl"
+          class="text-[#FFA900] text-4xl cursor-pointer"
           @click="scrollLeft"
         />
 
@@ -44,13 +44,13 @@
           class="flex-1 w-[100%] flex gap-5 pb-[2rem] overflow-y-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#565657] [&::-webkit-scrollbar-thumb]:bg-[#4636FF] [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
           ref="carousel"
         >
-          <div v-for="(artist, index) in music" :key="index">
+          <div v-for="(artist, index) in allArtists" :key="index">
             <artist-card :artist="artist" :index="index" />
           </div>
         </div>
         <font-awesome-icon
           :icon="['fas', 'arrow-right']"
-          class="text-[#FFA900] text-4xl"
+          class="text-[#FFA900] text-4xl cursor-pointer"
           @click="scrollRight"
         />
       </div>
@@ -60,12 +60,23 @@
 
 <script setup>
 import { useScroll } from "@vueuse/core";
-import { useTemplateRef } from "vue";
+import { useTemplateRef, onMounted, computed, ref } from "vue";
 
 import { useMusicStore } from "@/stores/music";
 import ArtistCard from "@/components/ArtistCard.vue";
 
-let { music } = useMusicStore();
+const musicStore = useMusicStore();
+
+const loadingArtists = ref(true);
+
+const allArtists = computed(() => musicStore.allArtists);
+
+onMounted(async () => {
+  await musicStore.fetchAllArtists(); // whatever your store action is
+  loadingArtists.value = false;
+});
+
+// console.log(allArtists);
 
 const carousel = useTemplateRef("carousel");
 let { x, y } = useScroll(carousel, { behavior: "smooth" });

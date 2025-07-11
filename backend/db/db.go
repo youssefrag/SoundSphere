@@ -109,5 +109,22 @@ func createTables() {
 
 	fmt.Println("Songs table created! ✅")
 
+	createCommentsTable := `
+		CREATE TABLE IF NOT EXISTS comments (
+			id SERIAL PRIMARY KEY,
+			content VARCHAR(400) NOT NULL,
+			song_id BIGINT NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+			user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+			created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+		)
+	`
+
+	if _, err := DB.Exec(createCommentsTable); err != nil {
+    fmt.Println("🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑")
+    panic(fmt.Sprintf("Could not create comments table: %v", err))
+  }
+
+	fmt.Println("Comments table created ✅")
+
 }
 
