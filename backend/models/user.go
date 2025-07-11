@@ -138,3 +138,20 @@ func GetUserByID(id int64) (User, error) {
 	
   return u, nil
 }
+
+func GetUserIDByEmail(email string) (int64, error) {
+	var id int64
+	err := db.DB.QueryRow(
+			`SELECT id FROM users WHERE email = $1`,
+			email,
+	).Scan(&id)
+	if err != nil {
+			if err == sql.ErrNoRows {
+					return 0, ErrUserNotFound
+			}
+			return 0, err
+	}
+	return id, nil
+}
+
+var ErrUserNotFound = fmt.Errorf("user not found")

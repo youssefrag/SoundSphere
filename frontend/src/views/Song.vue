@@ -104,8 +104,27 @@ const song = ref(null);
 const loading = ref(true);
 const error = ref(null);
 
+const comments = ref([]);
+const commentsLoading = ref(true);
+const commentsError = ref(null);
+
 const commentText = ref("");
 const submitting = ref(false);
+
+async function fetchComments() {
+  commentsLoading.value = true;
+  commentsError.value = false;
+  try {
+    const { data } = await api.get(`/comments/${songId}`);
+    comments.value = data;
+  } catch {
+    commentsError.value = true;
+  } finally {
+    commentsLoading.value = false;
+
+    console.log(comments.value);
+  }
+}
 
 onBeforeMount(async () => {
   try {
@@ -115,6 +134,8 @@ onBeforeMount(async () => {
   } finally {
     loading.value = false;
   }
+
+  await fetchComments();
 });
 
 async function submitComment() {
@@ -127,21 +148,17 @@ async function submitComment() {
 
   submitting.value = true;
   try {
-    console.log(commentText.value);
-    console.log(userStore.email);
-    console.log(songId);
-
-    await api.post(`/songs/${songId}/comments`, {
+    await api.post("/comments/addNew", {
       songId,
       content: commentText.value.trim(),
-      user: userStore.email,
+      email: userStore.email,
     });
 
     commentText.value = "";
-    // optionally reload comments or show a toast...
+
+    // await fetchComments();
   } catch (err) {
     console.error("Failed to submit comment", err);
-    // you could set an error flag and show something in the UI
   } finally {
     submitting.value = false;
   }

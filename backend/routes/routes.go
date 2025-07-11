@@ -15,4 +15,7 @@ func RegisterRoutes(server *gin.Engine) {
 	server.DELETE("songs/:songId", deleteSongsHandler)
 	server.PUT("songs/:songId", editSongHandler)
 	server.GET("/song-details/:songId", getSongDetailsHandler)
+
+	server.POST("/comments/addNew", addNewCommentHandler)
+	server.GET("/comments/:songId", getCommentsHandler)
 }
