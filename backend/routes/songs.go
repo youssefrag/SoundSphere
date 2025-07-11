@@ -110,3 +110,24 @@ func editSongHandler(context * gin.Context) {
 		"message": "edit succesful",
 	})
 }
+
+func getSongDetailsHandler(context *gin.Context) {
+	songIdStr := context.Param("songId")
+
+	songId, err := strconv.ParseInt(songIdStr, 10, 64)
+
+  if err != nil {
+    context.JSON(http.StatusBadRequest, gin.H{"error": "invalid song ID"})
+    return
+  }
+
+	songDetails, err := models.GetSongDetails(songId)
+
+	if err != nil {
+		
+		context.JSON(http.StatusBadRequest, gin.H{"error": "could fetch song details"})
+	}
+
+
+	context.JSON(http.StatusOK, songDetails)
+}

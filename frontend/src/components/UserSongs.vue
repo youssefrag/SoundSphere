@@ -83,7 +83,9 @@
           <div
             class="group flex items-center gap-2 text-[#7D72FF] border-b-2 border-transparent hover:border-[#7D72FF] transition-colors duration-300 ease-in-out cursor-pointer"
           >
-            <div>Song page</div>
+            <router-link :to="`/song/${song.id}`">
+              <div>Song page</div>
+            </router-link>
             <font-awesome-icon
               class="font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
               :icon="['fas', 'arrow-right']"

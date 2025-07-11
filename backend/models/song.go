@@ -12,13 +12,22 @@ import (
 
 type Song struct {
 	ID int64           `json:"id"`
-	Name string        `json:"name"        binding:"required"`
-	ArtistEmail string `json:"artistEmail,omitempty" binding:"required"`
-	Genre string       `json:"genre"       binding:"required"`
-	Duration int64     `json:"duration"       binding:"required"`
-	SongUrl string     `json:"songUrl"     binding:"required"`
+	Name string        `json:"name"                   binding:"required"`
+	ArtistEmail string `json:"artistEmail,omitempty"  binding:"required"`
+	Genre string       `json:"genre"                  binding:"required"`
+	Duration int64     `json:"duration"               binding:"required"`
+	SongUrl string     `json:"songUrl"                binding:"required"`
 	StoragePath string `json:"storagePath,,omitempty" binding:required`
 
+}
+
+type SongDetails struct {
+	Name string         `json:"name"       binding:"required"`
+	Genre string        `json:"genre"      binding:"required"`
+	SongUrl string      `json:"songUrl"    binding:"required"`
+	Date time.Time      `json:"date"         binding:"required"`
+	ArtistName string   `json:"artistName"   binding:"required"`
+	ArtistImgUrl string `json:"artistImgUrl" binding:"required"`
 }
 
 type ArtistWithSongs struct {
@@ -209,4 +218,38 @@ func EditSong(songId int64, name string, genre string) error {
 
 	return nil
 
+}
+
+func GetSongDetails(songId int64) (SongDetails, error) {
+	var details SongDetails
+	query := `
+  	SELECT
+    	s.name,
+    	s.genre,
+    	s.song_url    AS "songUrl",
+    	s.uploaded_at AS "date",
+    	u.name        AS "artistName",
+      COALESCE(u.imageurl, 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+        AS "artistImgUrl"
+  	FROM songs  AS s
+  	JOIN users  AS u ON s.artist_id = u.id
+  	WHERE s.id = $1;
+	`
+
+
+
+	if err := db.DB.QueryRow(query, songId).Scan(
+    &details.Name,
+    &details.Genre,
+    &details.SongUrl,
+    &details.Date,
+    &details.ArtistName,
+    &details.ArtistImgUrl,
+	); err != nil {
+
+		fmt.Println("🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑", err)
+    return SongDetails{}, err
+	}
+
+	return details, nil
 }

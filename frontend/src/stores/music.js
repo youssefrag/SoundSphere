@@ -72,6 +72,16 @@ export const useMusicStore = defineStore("music", () => {
     }
   }
 
+  async function fetchSongDetails(songId) {
+    try {
+      const { data } = await api.get(`/song-details/${songId}`);
+
+      return data;
+    } catch (error) {
+      throw Error("Error fetching song details.");
+    }
+  }
+
   fetchAllArtists();
 
   return {
@@ -83,5 +93,6 @@ export const useMusicStore = defineStore("music", () => {
     fetchAllArtists,
     deleteSong,
     editSong,
+    fetchSongDetails,
   };
 });

@@ -4,12 +4,14 @@
   >
     <div class="flex items-end gap-6">
       <v-lazy-image
-        :src="song.imageUrl"
-        class="h-[320px] w-[320px] bg-cover bg-center rounded-xl"
+        :src="song.artistImgUrl"
+        class="h-[320px] w-[320px] object-cover object-center rounded-xl"
       />
       <div class="flex flex-col gap-4">
-        <div class="text-[#0DE27C] font-bold">{{ song.artist }}</div>
-        <div class="text-[#fff] font-extrabold text-4xl">{{ song.name }}</div>
+        <div class="text-[#0DE27C] font-bold">{{ song.artistName }}</div>
+        <div class="text-[#fff] font-extrabold text-4xl">
+          {{ song.name }}
+        </div>
         <div class="flex gap-4">
           <div class="flex items-center gap-1">
             <div
@@ -33,7 +35,9 @@
                 class="text-[#FFA900] text-sm"
               />
             </div>
-            <div class="text-white text-xs font-extrabold">{{ song.date }}</div>
+            <div class="text-white text-xs font-extrabold">
+              {{ formatDDMMYYYY(song.date) }}
+            </div>
           </div>
         </div>
         <div
@@ -65,13 +69,32 @@
 
 <script setup>
 import VLazyImage from "v-lazy-image";
+import { ref, onBeforeMount } from "vue";
+import { useRoute } from "vue-router";
 
-const song = {
-  name: "Midnight Drive",
-  artist: "Alex Waves",
-  genre: "HIP HOP",
-  imageUrl:
-    "https://plus.unsplash.com/premium_photo-1720188548716-9de4d2911fff?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  date: "29-01-2025",
-};
+import { useMusicStore } from "@/stores/music";
+
+import { formatDDMMYYYY } from "@/utilities/helpers";
+
+const route = useRoute();
+const songId = route.params.id;
+
+console.log({ songId });
+
+const song = ref(null);
+const loading = ref(true);
+const error = ref(null);
+
+const musicStore = useMusicStore();
+
+onBeforeMount(async () => {
+  try {
+    song.value = await musicStore.fetchSongDetails(songId);
+    console.log(song.value);
+  } catch (e) {
+    error.value = true;
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
