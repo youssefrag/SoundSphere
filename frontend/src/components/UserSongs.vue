@@ -71,6 +71,25 @@
             </div>
           </div>
         </div>
+        <div class="flex flex-col justify-between items-center">
+          <div
+            class="group bg-gray-800 rounded-full h-[36px] w-[36px] flex items-center justify-center hover:bg-white transition-colors duration-200 cursor-pointer"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'play']"
+              class="text-[#0DE27c]/80 group-hover:text-[#099E56] transition-colors duration-200"
+            />
+          </div>
+          <div
+            class="flex items-center gap-2 text-[#7D72FF] border-b-2 border-transparent hover:border-[#7D72FF] transition-colors duration-300 ease-in-out cursor-pointer"
+          >
+            <div>Song page</div>
+            <font-awesome-icon
+              class="font-bold"
+              :icon="['fas', 'arrow-right']"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -110,6 +129,7 @@ async function saveSong(songId, originalName, originalGenre) {
   const { name, genre } = editValues[songId];
 
   if (name === originalName && genre === originalGenre) {
+    editing[songId] = false;
     return;
   }
 
