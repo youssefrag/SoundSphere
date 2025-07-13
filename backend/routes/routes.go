@@ -18,4 +18,5 @@ func RegisterRoutes(server *gin.Engine) {
 
 	server.POST("/comments/addNew", addNewCommentHandler)
 	server.GET("/comments/:songId", getCommentsHandler)
+	server.DELETE("/comments/:commentId", deleteCommentHandler)
 }

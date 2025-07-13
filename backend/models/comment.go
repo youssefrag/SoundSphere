@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/youssefrag/SoundSphere/db"
@@ -18,6 +19,7 @@ type CommentWithAuthor struct {
 	Content        string    `json:"content"`
 	CreatedAt      time.Time `json:"createdAt"`
 	UserName       string    `json:"userName"`
+	UserEmail      string    `json:"userEmail"`
 	UserImageUrl   string    `json:"userImageUrl"`
 }
 
@@ -41,6 +43,7 @@ func GetCommentsBySongID(songID int64) ([]CommentWithAuthor, error) {
 					c.content,
 					c.created_at,
 					u.name AS user_name,
+					u.email AS user_email,
 					COALESCE(
 						NULLIF(TRIM(u.imageurl), ''),
 						'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070'
@@ -63,6 +66,7 @@ func GetCommentsBySongID(songID int64) ([]CommentWithAuthor, error) {
 					&c.Content,
 					&c.CreatedAt,
 					&c.UserName,
+					&c.UserEmail,
 					&c.UserImageUrl,
 			); err != nil {
 					return nil, err
@@ -73,4 +77,26 @@ func GetCommentsBySongID(songID int64) ([]CommentWithAuthor, error) {
 			return nil, err
 	}
 	return out, nil
+}
+
+func DeleteCommentById(commentId int64) error {
+	const query = `
+			DELETE FROM comments
+			WHERE id = $1
+	`
+
+	result, err := db.DB.Exec(query, commentId)
+	if err != nil {
+			return fmt.Errorf("could not execute delete for comment %d: %w", commentId, err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+			return fmt.Errorf("could not fetch rows affected after deleting comment %d: %w", commentId, err)
+	}
+	if rowsAffected == 0 {
+			return fmt.Errorf("no comment found with id %d", commentId)
+	}
+
+	return nil
 }

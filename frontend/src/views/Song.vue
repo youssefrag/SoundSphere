@@ -58,7 +58,7 @@
         />
       </div>
     </section>
-    <section class="h-[600px] w-[100%] bg-[#0E0E0F] px-[40px] py-[60px]">
+    <section class="w-[100%] bg-[#0E0E0F] px-[40px] py-[60px]">
       <div class="text-white text-4xl font-semibold mb-10">
         Here's What People Are Saying About {{ song.name }}
       </div>
@@ -66,10 +66,11 @@
       <div class="flex flex-col gap-4">
         <textarea
           v-model="commentText"
+          maxlength="400"
           cols="4"
           type="text"
-          placeholder="Write Comment Here"
-          class="w-[100%] h-[200px] p-[20px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-sm font-semibold text-white placeholder-white rounded-2xl"
+          placeholder="Write Comment Here..."
+          class="w-[100%] h-[200px] p-[20px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-lg font-semibold text-white placeholder-white/70 rounded-2xl"
         />
         <button
           @click="submitComment"
@@ -77,6 +78,56 @@
         >
           {{ submitting ? "Submitting..." : "SUBMIT COMMENT" }}
         </button>
+      </div>
+    </section>
+    <section
+      class="w-[100%] bg-[#0E0E0F] px-[40px] py-[60px] grid grid-cols-2 gap-4"
+    >
+      <div
+        v-for="comment in comments"
+        :key="comment.id"
+        class="border border-white h-[240px] rounded-2xl px-[30px] py-[20px] flex flex-col justify-between"
+      >
+        <div class="flex justify-between items-center">
+          <div class="flex gap-4">
+            <div
+              class="flex justify-center items-center h-[50px] w-[50px] overflow-hidden rounded-full"
+            >
+              <img
+                :src="comment.userImageUrl"
+                class="h-full w-full object-cover object-center"
+                alt="User avatar"
+              />
+            </div>
+            <div class="flex flex-col justify-between">
+              <div class="text-white font-semibold text-lg">
+                {{ comment.userName }}
+              </div>
+              <div class="text-[#FFA900] font-bold text-sm">ARTIST</div>
+            </div>
+          </div>
+          <div
+            v-if="userStore.email === comment.userEmail"
+            @click="deleteComment(comment.id)"
+            class="text-red-500 hover:text-red-400 text-md cursor-pointer transform transition-all duration-200 hover:scale-[1.2]"
+          >
+            <font-awesome-icon :icon="['fas', 'trash']" />
+          </div>
+        </div>
+        <div class="text-white font-bold">{{ comment.content }}</div>
+        <div class="flex items-center gap-1">
+          <div
+            class="h-[28px] w-[28px] bg-slate-700 rounded-full flex justify-center items-center"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'calendar']"
+              class="text-[#FFA900] text-sm"
+            />
+          </div>
+          <div class="text-white text-xs font-extrabold">
+            {{ formatDDMMYYYY(comment.createdAt) }}
+          </div>
+        </div>
       </div>
     </section>
   </template>
@@ -126,6 +177,16 @@ async function fetchComments() {
   }
 }
 
+async function deleteComment(commentId) {
+  try {
+    await api.delete(`/comments/${commentId}`);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await fetchComments();
+  }
+}
+
 onBeforeMount(async () => {
   try {
     song.value = await musicStore.fetchSongDetails(songId);
@@ -156,7 +217,7 @@ async function submitComment() {
 
     commentText.value = "";
 
-    // await fetchComments();
+    await fetchComments();
   } catch (err) {
     console.error("Failed to submit comment", err);
   } finally {

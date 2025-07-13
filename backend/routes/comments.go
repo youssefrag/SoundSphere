@@ -65,3 +65,18 @@ func getCommentsHandler(context *gin.Context) {
 
 	context.JSON(http.StatusOK, comments)
 }
+
+func deleteCommentHandler(context *gin.Context) {
+	commentIdStr := context.Param("commentId")
+
+	fmt.Println(commentIdStr, "🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑")
+
+	commentId, err := strconv.ParseInt(commentIdStr, 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid songId"})
+		return
+	}
+
+	err = models.DeleteCommentById(commentId)
+
+}
