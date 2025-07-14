@@ -15,6 +15,7 @@ import {
   faTrash,
   faPencil,
   faSave,
+  faPause,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -31,7 +32,8 @@ library.add(
   faCheck,
   faTrash,
   faPencil,
-  faSave
+  faSave,
+  faPause
 );
 
 export default FontAwesomeIcon;

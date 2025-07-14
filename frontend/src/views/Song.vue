@@ -49,11 +49,24 @@
           </div>
         </div>
       </div>
+
       <div
+        @click="
+          playerStore.togglePlay({
+            id: songId,
+            name: song.name,
+            duration: song.duration,
+            songUrl: song.songUrl,
+          })
+        "
         class="flex justify-center items-center h-[80px] w-[80px] bg-[#0DE27C] rounded-full pl-2"
       >
         <font-awesome-icon
-          :icon="['fas', 'play']"
+          :icon="
+            playerStore.playing && playerStore.currentSong?.id === songId
+              ? ['fas', 'pause']
+              : ['fas', 'play']
+          "
           class="text-white text-4xl"
         />
       </div>
@@ -142,6 +155,7 @@ import api from "@/api";
 import { useMusicStore } from "@/stores/music";
 import { useUserStore } from "@/stores/user";
 import { useModalStore } from "@/stores/modal";
+import { usePlayerStore } from "@/stores/player";
 
 import { formatDDMMYYYY } from "@/utilities/helpers";
 
@@ -150,6 +164,7 @@ const songId = route.params.id;
 const musicStore = useMusicStore();
 const userStore = useUserStore();
 const modalStore = useModalStore();
+const playerStore = usePlayerStore();
 
 const song = ref(null);
 const loading = ref(true);
@@ -172,8 +187,6 @@ async function fetchComments() {
     commentsError.value = true;
   } finally {
     commentsLoading.value = false;
-
-    console.log(comments.value);
   }
 }
 

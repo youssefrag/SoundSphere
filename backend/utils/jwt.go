@@ -3,9 +3,12 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
+	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -41,4 +44,56 @@ func GenerateRefreshToken(userID int64, jti string) (string, error) {
 	// Build and sign the token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(refreshSecret))
+}
+
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+
+type CustomClaims struct {
+  UserID int64 `json:"userId"`
+  jwt.RegisteredClaims
+}
+
+func validateJWT(tokenString string) (*CustomClaims, error) {
+	tokenString = strings.TrimSpace(strings.TrimPrefix(tokenString, "Bearer"))
+
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(t *jwt.Token) (interface{}, error) {
+		if t.Method.Alg() != jwt.SigningMethodHS256.Alg() {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+		return jwtSecret, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(*CustomClaims)
+
+	if !ok || !token.Valid {
+		return nil, errors.New("invalid token")
+	}
+
+	return claims, nil
+}
+
+func AuthMiddleware() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		authHeader := context.GetHeader("Authorization")
+
+		fmt.Println("Auth header:", authHeader)
+
+		if authHeader == "" {
+			context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing auth header"})
+			return
+		}
+
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		claims, err := validateJWT(tokenString)
+
+		if err != nil {
+			context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			return
+		}
+		context.Set("userID", claims.UserID)
+		context.Next()
+	}
 }

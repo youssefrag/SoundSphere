@@ -48,7 +48,9 @@ export const useMusicStore = defineStore("music", () => {
     error.value = null;
 
     try {
-      const { data } = await api.delete(`songs/${songId}`);
+      const { data } = await api.delete(`songs/${songId}`, {
+        headers: { Authorization: `Bearer ${userStore.accessToken}` },
+      });
 
       const { storage_path: storagePath } = data;
 

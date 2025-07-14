@@ -22,9 +22,10 @@ type Song struct {
 }
 
 type SongDetails struct {
-	Name string         `json:"name"       binding:"required"`
-	Genre string        `json:"genre"      binding:"required"`
-	SongUrl string      `json:"songUrl"    binding:"required"`
+	Name string         `json:"name"         binding:"required"`
+	Genre string        `json:"genre"        binding:"required"`
+	SongUrl string      `json:"songUrl"      binding:"required"`
+	Duration int64      `json:"duration"     binding:"required"` 
 	Date time.Time      `json:"date"         binding:"required"`
 	ArtistName string   `json:"artistName"   binding:"required"`
 	ArtistImgUrl string `json:"artistImgUrl" binding:"required"`
@@ -228,6 +229,7 @@ func GetSongDetails(songId int64) (SongDetails, error) {
     	s.genre,
     	s.song_url    AS "songUrl",
     	s.uploaded_at AS "date",
+			s.duration AS "duration",
     	u.name        AS "artistName",
 			COALESCE(
   			NULLIF(TRIM(u.imageurl), ''),
@@ -245,6 +247,7 @@ func GetSongDetails(songId int64) (SongDetails, error) {
     &details.Genre,
     &details.SongUrl,
     &details.Date,
+		&details.Duration,
     &details.ArtistName,
     &details.ArtistImgUrl,
 	); err != nil {
