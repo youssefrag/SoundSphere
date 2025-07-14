@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-[#0E0E0F] px-[60px] py-[40px]">
+  <section class="pb-[100px] bg-[#0E0E0F] px-[60px] py-[40px]">
     <h1 class="text-white text-3xl font-extrabold mb-10">My Songs</h1>
     <div class="grid grid-cols-2 gap-4">
       <div

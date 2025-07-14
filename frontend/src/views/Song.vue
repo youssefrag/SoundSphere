@@ -96,7 +96,7 @@
       </div>
     </section>
     <section
-      class="w-[100%] bg-[#0E0E0F] px-[40px] py-[60px] grid grid-cols-2 gap-4"
+      class="pb-[200px] w-[100%] bg-[#0E0E0F] px-[40px] py-[60px] grid grid-cols-2 gap-4"
     >
       <div
         v-for="comment in comments"
@@ -205,7 +205,7 @@ async function deleteComment(commentId) {
 onBeforeMount(async () => {
   try {
     song.value = await musicStore.fetchSongDetails(songId);
-    console.log(song.value);
+    // console.log(song.value);
   } catch (e) {
     error.value = true;
   } finally {

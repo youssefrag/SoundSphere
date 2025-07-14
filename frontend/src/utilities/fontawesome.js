@@ -16,6 +16,7 @@ import {
   faPencil,
   faSave,
   faPause,
+  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -33,7 +34,8 @@ library.add(
   faTrash,
   faPencil,
   faSave,
-  faPause
+  faPause,
+  faCircle
 );
 
 export default FontAwesomeIcon;

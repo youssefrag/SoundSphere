@@ -3,7 +3,7 @@
     <app-header />
     <RouterView />
     <Auth v-if="modalStore.isOpen" />
-    <Player />
+    <Player v-if="playerStore.currentSong.name" />
   </div>
 </template>
 
@@ -15,6 +15,8 @@ import Auth from "@/components/Auth.vue";
 import Player from "./components/Player.vue";
 
 import { useModalStore } from "@/stores/modal";
+import { usePlayerStore } from "./stores/player";
 
 const modalStore = useModalStore();
+const playerStore = usePlayerStore();
 </script>

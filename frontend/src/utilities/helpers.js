@@ -1,9 +1,7 @@
 export function formatDuration(totalSeconds) {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  // pad seconds with leading zero if needed
-  const paddedSeconds = String(seconds).padStart(2, "0");
-  return `${minutes}:${paddedSeconds}`;
+  const secs = Math.floor(totalSeconds % 60);
+  const mins = Math.floor(totalSeconds / 60);
+  return `${mins}:${String(secs).padStart(2, "0")}`;
 }
 
 export function formatDDMMYYYY(iso) {

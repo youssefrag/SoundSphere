@@ -29,7 +29,7 @@
         </div>
       </section>
     </section>
-    <section class="h-[757px] bg-[#0E0E0F] py-[6rem]">
+    <section class="pb-[200px] bg-[#0E0E0F] py-[6rem]">
       <div class="text-[#fff] text-center text-5xl mb-[4rem] font-semibold">
         Trending & Latest Music
       </div>
