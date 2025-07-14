@@ -7,15 +7,20 @@
       <h1 class="text-3xl font-bold text-[#fff]">SoundSphere</h1>
     </div>
     <div class="flex items-center gap-8">
-      <a href="/" class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
+      <!-- <a href="/" class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
         >HOME</a
+      > -->
+      <router-link
+        to="/"
+        class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
+        >Home</router-link
       >
-      <a href="/" class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
+      <!-- <a href="/" class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
         >BROWSE</a
       >
       <a href="/" class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
         >PROFILE</a
-      >
+      > -->
     </div>
     <div class="flex items-center gap-4">
       <div

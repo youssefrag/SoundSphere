@@ -36,23 +36,18 @@ export const usePlayerStore = defineStore("player", () => {
   }
 
   function togglePlay(song) {
-    console.log("🏓🏓🏓🏓🏓🏓🏓🏓🏓🏓", sound.value instanceof Howl);
-
     if (
       currentSong.value?.id === song.id &&
       sound.value instanceof Howl &&
       sound.value.playing()
     ) {
-      console.log("🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢");
       sound.value.pause();
     } else if (
       currentSong.value?.id === song.id &&
       sound.value instanceof Howl
     ) {
-      console.log("🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡");
       sound.value.play();
     } else {
-      console.log("🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑");
       newSong(song);
     }
   }
@@ -87,6 +82,7 @@ export const usePlayerStore = defineStore("player", () => {
     currentSong,
     sound,
     playing,
+    seek,
     newSong,
     togglePlay,
     progress,

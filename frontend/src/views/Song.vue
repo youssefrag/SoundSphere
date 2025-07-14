@@ -57,9 +57,11 @@
             name: song.name,
             duration: song.duration,
             songUrl: song.songUrl,
+            artistName: song.artistName,
+            artistImgUrl: song.artistImgUrl,
           })
         "
-        class="flex justify-center items-center h-[80px] w-[80px] bg-[#0DE27C] rounded-full pl-2"
+        class="flex justify-center items-center h-[80px] w-[80px] bg-[#0DE27C] rounded-full"
       >
         <font-awesome-icon
           :icon="
@@ -203,6 +205,7 @@ async function deleteComment(commentId) {
 onBeforeMount(async () => {
   try {
     song.value = await musicStore.fetchSongDetails(songId);
+    console.log(song.value);
   } catch (e) {
     error.value = true;
   } finally {

@@ -64,7 +64,6 @@ const { artist, index } = defineProps(["index", "artist"]);
 
 const DEFAULT_AVATAR =
   "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-console.log(artist);
 
 const { songs } = artist;
 </script>
