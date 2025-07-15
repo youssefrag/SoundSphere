@@ -81,10 +81,23 @@
         </div>
         <div class="flex flex-col justify-between items-center">
           <div
+            @click="
+              playerStore.togglePlay({
+                id: song.id,
+                name: song.name,
+                duration: song.duration,
+                songUrl: song.songUrl,
+                artistName: song.artistName,
+              })
+            "
             class="group bg-gray-800 rounded-full h-[36px] w-[36px] flex items-center justify-center hover:bg-white transition-colors duration-200 cursor-pointer"
           >
             <font-awesome-icon
-              :icon="['fas', 'play']"
+              :icon="
+                playerStore.playing && playerStore.currentSong?.id === song.id
+                  ? ['fas', 'pause']
+                  : ['fas', 'play']
+              "
               class="text-[#0DE27c]/80 group-hover:text-[#099E56] transition-colors duration-200"
             />
           </div>
@@ -110,9 +123,12 @@ import { onMounted, reactive, nextTick } from "vue";
 
 import api from "@/api";
 import { useMusicStore } from "@/stores/music";
+import { usePlayerStore } from "@/stores/player";
+
 import { formatDuration } from "../utilities/helpers";
 
 const musicStore = useMusicStore();
+const playerStore = usePlayerStore();
 
 const editing = reactive({});
 const editValues = reactive({});

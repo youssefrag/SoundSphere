@@ -36,22 +36,36 @@
           </div>
 
           <div
-            class="h-[36px] w-[36px] bg-gray-800 opacity-100 flex justify-center items-center rounded-full"
+            @click="
+              playerStore.togglePlay({
+                id: song.id,
+                name: song.name,
+                duration: song.duration,
+                songUrl: song.songUrl,
+                artistName: song.artistName,
+              })
+            "
+            class="h-[36px] w-[36px] bg-gray-800 opacity-100 flex justify-center items-center rounded-full cursor-pointer"
           >
             <font-awesome-icon
-              :icon="['fas', 'play']"
+              :icon="
+                playerStore.playing && playerStore.currentSong?.id === song.id
+                  ? ['fas', 'pause']
+                  : ['fas', 'play']
+              "
               class="text-[#0DE27C] text-xl"
             />
           </div>
 
-          <div
+          <router-link
+            :to="{ name: 'song', params: { id: song.id } }"
             class="h-[36px] w-[36px] bg-gray-800 opacity-100 flex justify-center items-center rounded-full"
           >
             <font-awesome-icon
               :icon="['fas', 'comment']"
               class="text-[#0DE27C] text-xl"
             />
-          </div>
+          </router-link>
         </div>
       </div>
     </div>
@@ -59,8 +73,12 @@
 </template>
 
 <script setup>
+import { usePlayerStore } from "@/stores/player";
+
 import { formatDuration } from "@/utilities/helpers";
 const { artist, index } = defineProps(["index", "artist"]);
+
+const playerStore = usePlayerStore();
 
 const DEFAULT_AVATAR =
   "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";

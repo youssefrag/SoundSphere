@@ -21,15 +21,19 @@ type editSongRequest struct {
 
 func saveSongHandler(context *gin.Context) {
 
+	
 	var song models.Song
 	
 	err := context.ShouldBindJSON(&song)
 
+	
 	if err != nil {
+		fmt.Println("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴", err)
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
-
+		
 		return
 	}
+	
 
 	err = song.Save()
 
