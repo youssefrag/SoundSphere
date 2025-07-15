@@ -9,6 +9,7 @@ export const useMusicStore = defineStore("music", () => {
   const allArtists = ref([]);
   const loading = ref(false);
   const error = ref(null);
+  const searchTerm = ref("");
 
   const userStore = useUserStore();
 
@@ -16,6 +17,31 @@ export const useMusicStore = defineStore("music", () => {
     const bucket = allArtists.value.find((a) => a.email === userStore.email);
     return bucket ? bucket.songs : [];
   });
+
+  const allSongs = computed(() =>
+    allArtists.value.flatMap((artist) =>
+      artist.songs.map((song) => ({
+        ...song,
+        artistEmail: artist.email,
+        artistName: artist.name,
+      }))
+    )
+  );
+
+  const filteredSongs = computed(() => {
+    if (!searchTerm.value) return [];
+    const term = searchTerm.value.toLowerCase();
+    return allSongs.value.filter(
+      (song) =>
+        song.name.toLowerCase().startsWith(term) ||
+        song.genre.toLowerCase().startsWith(term) ||
+        song.artistName.toLowerCase().startsWith(term)
+    );
+  });
+
+  function clearSearchTerm() {
+    searchTerm.value = "";
+  }
 
   async function saveSong(name, genre, artist, songUrl, duration, storagePath) {
     await api.post("/saveSong", {
@@ -89,6 +115,8 @@ export const useMusicStore = defineStore("music", () => {
   return {
     allArtists,
     userSongs,
+    filteredSongs,
+    searchTerm,
     loading,
     error,
     saveSong,
@@ -96,5 +124,6 @@ export const useMusicStore = defineStore("music", () => {
     deleteSong,
     editSong,
     fetchSongDetails,
+    clearSearchTerm,
   };
 });

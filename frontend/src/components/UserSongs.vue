@@ -1,5 +1,5 @@
 <template>
-  <section class="pb-[100px] bg-[#0E0E0F] px-[60px] py-[40px]">
+  <section class="pb-[150px] bg-[#0E0E0F] px-[60px] py-[40px]">
     <h1
       v-if="musicStore.userSongs.length > 0"
       class="text-white text-3xl font-extrabold mb-10"

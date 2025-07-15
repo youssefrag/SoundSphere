@@ -95,7 +95,7 @@
       </div>
     </section>
     <section
-      class="pb-[200px] w-[100%] bg-[#0E0E0F] px-[40px] py-[60px] grid grid-cols-2 gap-4"
+      class="pb-[120px] w-[100%] bg-[#0E0E0F] px-[40px] pt-[60px] grid grid-cols-2 gap-4"
     >
       <div
         v-for="comment in comments"

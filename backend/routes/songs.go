@@ -28,7 +28,6 @@ func saveSongHandler(context *gin.Context) {
 
 	
 	if err != nil {
-		fmt.Println("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴", err)
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
 		
 		return

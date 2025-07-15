@@ -70,7 +70,7 @@
       <input
         ref="fileInput"
         type="file"
-        accept="image/x"
+        accept="image/*"
         @change="onFileChange"
         class="hidden"
       />

@@ -3,15 +3,19 @@
   <div class="fixed bottom-0 left-0 bg-white px-4 py-2 w-full">
     <!-- Track Info -->
     <div class="text-center" v-if="currentSong.name">
-      <span class="song-title font-bold">{{ currentSong.name }}</span>
+      <span class="song-title font-bold text-[#15104c]">{{
+        currentSong.name
+      }}</span>
       by
-      <span class="song-artist">{{ currentSong.artistName }}</span>
+      <span class="song-artist font-bold text-[#15104c]">{{
+        currentSong.artistName
+      }}</span>
     </div>
     <div class="flex flex-nowrap gap-4 items-center">
       <div @click="togglePlay(currentSong)" class="cursor-pointer">
         <font-awesome-icon
           :icon="playing ? ['fas', 'pause'] : ['fas', 'play']"
-          class="text-green-400 text-4xl"
+          class="text-[#07713e] text-4xl"
         />
       </div>
 
@@ -24,10 +28,10 @@
           class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg"
           :style="{ left: playerProgress }"
         >
-          <i class="fas fa-circle"></i>
+          <font-awesome-icon :icon="['fas', 'circle']" />
         </span>
         <span
-          class="block h-2 rounded bg-gradient-to-r from-green-500 to-green-400"
+          class="block h-2 rounded bg-gradient-to-r from-[#07713e] to-[#07713e]"
           :style="{ width: playerProgress }"
         ></span>
       </div>
@@ -46,6 +50,4 @@ const playerStore = usePlayerStore();
 const { currentSong, playing, seek, playerProgress, duration } =
   storeToRefs(playerStore);
 const { togglePlay, updateSeek } = playerStore;
-
-console.log(currentSong);
 </script>

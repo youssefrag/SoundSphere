@@ -17,19 +17,20 @@
           class="w-[824px] h-[84px] bg-gray-400 rounded-full pr-3 pl-10 flex items-center justify-between"
         >
           <input
+            ref="searchInput"
+            maxlength="15"
+            v-model="musicStore.searchTerm"
             type="text"
             placeholder="Seach for music here"
             class="w-[80%] bg-gray-400 border-none focus:border-none focus:outline-none text-3xl font-black text-gray-700 placeholder-gray-700"
           />
-          <button
-            class="text-[#0E0E0F] text-sm py-2 px-8 rounded-full bg-gradient-to-r from-[#98C970] to-[#0DE27C] h-[80%]"
-          >
-            Search
-          </button>
         </div>
       </section>
     </section>
-    <section class="pb-[200px] bg-[#0E0E0F] py-[6rem]">
+    <section
+      v-if="musicStore.searchTerm === ''"
+      class="pb-[200px] bg-[#0E0E0F] py-[6rem]"
+    >
       <div class="text-[#fff] text-center text-5xl mb-[4rem] font-semibold">
         Trending & Latest Music
       </div>
@@ -55,17 +56,54 @@
         />
       </div>
     </section>
+    <section v-else class="pb-[200px] bg-[#0E0E0F] py-[6rem]">
+      <div class="flex items-center justify-center mb-[4rem] gap-4">
+        <div class="text-[#fff] text-center text-5xl font-semibold">
+          Search results for "{{ musicStore.searchTerm }}"
+        </div>
+        <div
+          @click="musicStore.clearSearchTerm"
+          class="h-[52px] w-[52px] bg-gray-800 opacity-100 flex justify-center items-center rounded-full cursor-pointer"
+        >
+          <font-awesome-icon
+            :icon="['fas', 'x']"
+            class="text-[#4636FF] text-3xl"
+          />
+        </div>
+      </div>
+      <div
+        v-if="musicStore.filteredSongs.length === 0"
+        class="text-center text-2xl font-bold text-[#FFA900]"
+      >
+        No results!
+      </div>
+      <FilteredSongs v-else />
+    </section>
   </div>
 </template>
 
 <script setup>
 import { useScroll } from "@vueuse/core";
-import { useTemplateRef, onMounted, computed, ref } from "vue";
+import {
+  useTemplateRef,
+  onMounted,
+  computed,
+  ref,
+  watch,
+  nextTick,
+  onUnmounted,
+} from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { useMusicStore } from "@/stores/music";
 import ArtistCard from "@/components/ArtistCard.vue";
+import FilteredSongs from "@/components/FilteredSongs.vue";
 
 const musicStore = useMusicStore();
+
+const route = useRoute();
+const router = useRouter();
+const searchInput = ref(null);
 
 const loadingArtists = ref(true);
 
@@ -76,7 +114,9 @@ onMounted(async () => {
   loadingArtists.value = false;
 });
 
-// console.log(allArtists);
+onUnmounted(() => {
+  musicStore.clearSearchTerm();
+});
 
 const carousel = useTemplateRef("carousel");
 let { x, y } = useScroll(carousel, { behavior: "smooth" });
@@ -88,4 +128,19 @@ const scrollRight = () => {
 const scrollLeft = () => {
   x.value -= 400;
 };
+
+// Logic for when we navigate using search bar
+watch(
+  () => route.query.focus,
+  async (focus) => {
+    if (focus === "search") {
+      await nextTick(); // wait for DOM
+      searchInput.value?.focus(); // focus the input
+      // remove the query so it won't re‑trigger
+      const { focus: _, t, ...keep } = route.query;
+      router.replace({ query: keep });
+    }
+  },
+  { immediate: true }
+);
 </script>
