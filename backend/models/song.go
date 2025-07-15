@@ -13,7 +13,8 @@ import (
 type Song struct {
 	ID int64           `json:"id"`
 	Name string        `json:"name"                   binding:"required"`
-	ArtistEmail string `json:"artistEmail,omitempty"  binding:"required"`
+	ArtistEmail string `json:"artistEmail"            binding:"required"`
+	ArtistName string `json:"artistName"              binding:"required"`
 	Genre string       `json:"genre"                  binding:"required"`
 	Duration int64     `json:"duration"               binding:"required"`
 	SongUrl string     `json:"songUrl"                binding:"required"`
@@ -164,6 +165,9 @@ func GetAllSongs() ([]ArtistWithSongs, error) {
 
 			order = append(order, artistEmail)
 		}
+
+		song.ArtistEmail = artistEmail
+    song.ArtistName  = artistName
 		
 		groups[artistEmail].Songs = append(groups[artistEmail].Songs, song)
 	}

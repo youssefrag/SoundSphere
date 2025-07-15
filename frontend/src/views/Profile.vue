@@ -6,6 +6,7 @@
       class="w-[100%] h-[300px] rounded-xl bg-gradient-to-r from-[#15104c] via-black to-[#032d19] flex flex-col justify-end items-start p-[20px]"
     >
       <div
+        v-if="musicStore.userSongs.length > 0"
         class="items-self-end flex justify-center items-center h-[60px] w-[60px] bg-[#0DE27C] rounded-full pl-2"
       >
         <font-awesome-icon
