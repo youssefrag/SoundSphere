@@ -3,11 +3,11 @@
   <div class="fixed bottom-0 left-0 bg-white px-4 py-2 w-full">
     <!-- Track Info -->
     <div class="text-center" v-if="currentSong.name">
-      <span class="song-title font-bold text-[#15104c]">{{
+      <span class="song-title font-extrabold text-[#01170c]">{{
         currentSong.name
       }}</span>
       by
-      <span class="song-artist font-bold text-[#15104c]">{{
+      <span class="song-artist font-extrabold text-[#01170c]">{{
         currentSong.artistName
       }}</span>
     </div>
