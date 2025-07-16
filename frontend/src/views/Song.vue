@@ -2,12 +2,12 @@
   <div v-if="loading" class="p-8 text-white">Loading song…</div>
   <template v-else>
     <section
-      class="flex items-end justify-between w-[100%] h-[400px] top-[100px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] px-[40px] py-[40px]"
+      class="flex items-end justify-between w-[100%] h-[400px] top-[100px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] px-[40px] py-[40px] md-down:h-[300px]"
     >
       <div class="flex items-end gap-6">
         <v-lazy-image
           :src="song.artistImgUrl"
-          class="h-[320px] w-[320px] object-cover object-center rounded-xl"
+          class="h-[320px] w-[320px] object-cover object-center rounded-xl md-down:hidden"
         />
         <div class="flex flex-col gap-4">
           <div class="text-[#0DE27C] font-bold">{{ song.artistName }}</div>
@@ -73,7 +73,7 @@
       </div>
     </section>
     <section class="w-[100%] bg-[#0E0E0F] px-[40px] py-[60px]">
-      <div class="text-white text-4xl font-semibold mb-10">
+      <div class="text-white text-4xl font-semibold mb-10 md-down:text-2xl">
         Here's What People Are Saying About {{ song.name }}
       </div>
 
@@ -84,7 +84,7 @@
           cols="4"
           type="text"
           placeholder="Write Comment Here..."
-          class="w-[100%] h-[200px] p-[20px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-lg font-semibold text-white placeholder-white/70 rounded-2xl"
+          class="w-[100%] h-[200px] p-[20px] bg-gradient-to-r from-[#0E0E0F] to-[#1e2816] border border-[#07713e] focus:border focus:border-[#0DE27C] focus:outline-none text-lg font-semibold text-white placeholder-white/70 rounded-2xl md-down:h-[160px]"
         />
         <button
           @click="submitComment"
@@ -95,7 +95,7 @@
       </div>
     </section>
     <section
-      class="pb-[120px] w-[100%] bg-[#0E0E0F] px-[40px] pt-[60px] grid grid-cols-2 gap-4"
+      class="pb-[120px] w-[100%] bg-[#0E0E0F] px-[40px] pt-[60px] grid grid-cols-2 gap-4 md-down:grid-cols-1"
     >
       <div
         v-for="comment in comments"

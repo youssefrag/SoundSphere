@@ -1,6 +1,6 @@
 <template class="rounded-2xl">
   <div
-    class="h-[488px] w-[650px] bg-center bg-cover rounded-2xl"
+    class="h-[488px] w-[650px] bg-center bg-cover rounded-2xl md-down:w-[550px] md-down:h-[450px]"
     :class="{
       'bg-[url(@/assets/images/artist-bg1.avif)]': index % 3 == 0,
       'bg-[url(@/assets/images/artist-bg2.avif)]': index % 3 == 1,

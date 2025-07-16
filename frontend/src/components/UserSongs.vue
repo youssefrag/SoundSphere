@@ -9,7 +9,7 @@
     <h1 v-else class="text-white text-3xl font-extrabold mb-10">
       User has not uploaded any songs
     </h1>
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-2 gap-4 md-down:grid-cols-1">
       <div
         v-for="song in musicStore.userSongs"
         :key="song.id"
@@ -21,12 +21,14 @@
             class="inline-grid grid-cols-[max-content] gap-3 mb-3"
           >
             <input
+              maxlength="20"
               v-model="editValues[song.id].name"
               :ref="(el) => (nameInputs[song.id] = el)"
               @keyup.enter.prevent="saveSong(song.id, song.name, song.genre)"
               class="bg-transparent border-b border-gray-400 text-white text-xl font-bold pb-1 focus:outline-none"
             />
             <input
+              maxlength="20"
               v-model="editValues[song.id].genre"
               @keyup.enter.prevent="saveSong(song.id, song.name, song.genre)"
               class="bg-transparent border-b border-gray-400 text-[#7D72FF] text-md font-semibold pb-1 focus:outline-none"

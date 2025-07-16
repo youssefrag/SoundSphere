@@ -2,7 +2,7 @@
   <nav
     class="sticky top-0 z-50 h-[100px] bg-[#0E0E0F] w-[100%] flex items-center justify-between px-20 border-b border-gray-100"
   >
-    <router-link to="/" class="flex items-center gap-4">
+    <router-link to="/" class="flex items-center gap-4 md-down:hidden">
       <img alt="logo" src="../assets/Vector.png" />
       <h1 class="text-3xl font-bold text-[#fff]">SoundSphere</h1>
     </router-link>

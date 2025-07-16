@@ -35,15 +35,20 @@
   <section
     class="flex flex-col justify-center w-[100%] bg-[#0E0E0F] px-[60px] py-[40px]"
   >
-    <div class="text-3xl font-extrabold text-white mb-[40px]">
+    <div
+      class="text-3xl font-extrabold text-white mb-[40px] md-down:text-yellow-400 sm-down:text-blue-900"
+    >
       Upload Your New Song 🔥
     </div>
     <Form @submit="onSubmit">
-      <div class="flex justify-between gap-8 mb-8">
+      <div
+        class="flex justify-between gap-8 mb-8 md-down:grid md-down:grid-cols-2 md-down:gap-4"
+      >
         <!-- Song Name -->
         <div class="flex flex-col flex-1 gap-2">
           <label class="text-white pl-2" for="songName">Song Name</label>
           <input
+            maxlength="20"
             id="songName"
             v-model="songName"
             @blur="songNameBlur"
@@ -60,6 +65,7 @@
         <div class="flex flex-col flex-1 gap-2">
           <label class="text-white pl-2" for="genre">Genre</label>
           <input
+            maxlength="20"
             id="genre"
             v-model="genre"
             @blur="genreBlur"
