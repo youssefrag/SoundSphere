@@ -1,39 +1,35 @@
-# ───────────── STAGE 1: Build ─────────────
+# ─────────── STAGE 1: Builder ───────────
 FROM node:18-alpine AS builder
-
-# 1. Set working directory
 WORKDIR /app
 
-# 2. Copy dependency manifests
+# 1. Declare build args for each VITE_… var
+ARG VITE_FIREBASE_API_KEY
+ARG VITE_FIREBASE_AUTH_DOMAIN
+ARG VITE_FIREBASE_PROJECT_ID
+ARG VITE_FIREBASE_STORAGE_BUCKET
+
+# 2. Export them so Vite sees them during `npm run build`
+ENV VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY \
+    VITE_FIREBASE_AUTH_DOMAIN=$VITE_FIREBASE_AUTH_DOMAIN \
+    VITE_FIREBASE_PROJECT_ID=$VITE_FIREBASE_PROJECT_ID \
+    VITE_FIREBASE_STORAGE_BUCKET=$VITE_FIREBASE_STORAGE_BUCKET
+
+# 3. Install deps & build
 COPY package.json package-lock.json ./
-
-# 3. Copy env‑files so Vite can read VITE_… variables
-#    (If you have .env.production, copy that instead or in addition.)
-COPY .env ./
-
-# 4. Install deps
 RUN npm install
-
-# 5. Copy the rest of your source
 COPY . .
-
-# 6. Build for production
 RUN npm run build
 
 
 
-# ───────────── STAGE 2: Serve ─────────────
+# ─────────── STAGE 2: Runtime ───────────
 FROM node:18-alpine AS runtime
-
-# 7. Install a static file server
+WORKDIR /app
 RUN npm install -g serve
 
-# 8. Copy only the built assets
-WORKDIR /app
+# 4. Copy the production build
 COPY --from=builder /app/dist ./dist
-
-# 9. Expose the port
 EXPOSE 5173
 
-# 10. Start the server
+# 5. Serve it
 CMD ["serve", "-s", "dist", "-l", "5173"]
