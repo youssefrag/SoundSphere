@@ -1,21 +1,32 @@
-# Step 1: Use an official Node.js image as a parent image
-FROM node:18-alpine
+# ───────────── STAGE 1: Build ─────────────
+FROM node:18-alpine AS builder
 
-# Step 2: Set the working directory inside the container
+# 1. Set working directory
 WORKDIR /app
 
-
-# Step 3: Copy package.json and package-lock.json to the working directory
+# 2. Copy manifest & install deps
 COPY package.json package-lock.json ./
-
-# Step 4: Install the dependencies
 RUN npm install
 
-# Step 5: Copy the rest of the application code
+# 3. Copy source & build
 COPY . .
+RUN npm run build
 
-# Step 6: Expose the port your app will run on
-EXPOSE 3000
 
-# Step 7: Run your frontend application
-CMD ["npm", "start"]
+
+# ───────────── STAGE 2: Runtime ─────────────
+FROM node:18-alpine AS runtime
+
+# 4. Install `serve` to deliver static files
+RUN npm install -g serve
+
+# 5. Create app directory & pull in built assets
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+
+# 6. Expose the port we’ll serve on
+EXPOSE 5173
+
+# 7. Start the static server
+CMD ["serve", "-s", "dist", "-l", "5173"]
+
