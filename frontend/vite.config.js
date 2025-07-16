@@ -1,18 +1,20 @@
-import { fileURLToPath, URL } from 'node:url'
+// vite.config.js
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
-
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    },
+  plugins: [vue()],
+  server: {
+    // keep your allowedHosts here if you need them
+    allowedHosts: ["soundsphere-z0qd.onrender.com"],
   },
-})
+  build: {
+    // target a version that supports top-level await
+    target: "es2022",
+    // or simply: target: "esnext"
+  },
+  // if you want to be extra sure ESBuild sees it:
+  esbuild: {
+    target: "es2022",
+  },
+});
