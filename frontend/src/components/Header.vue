@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="sticky top-0 z-50 h-[100px] bg-[#0E0E0F] w-[100%] flex items-center justify-between px-20 border-b border-gray-100"
+    class="sticky top-0 z-50 h-[100px] bg-[#0E0E0F] w-[100%] flex items-center justify-between px-20 border-b border-gray-100 sm-down:px-[40px]"
   >
     <router-link to="/" class="flex items-center gap-4 md-down:hidden">
       <img alt="logo" src="../assets/Vector.png" />
@@ -19,20 +19,20 @@
         v-if="userStore.accessToken"
         to="/profile"
         class="text-[#fff] font-extrabold hover:text-[#FF4D42]"
-        >Profile</router-link
+        >Upload</router-link
       >
       <div
         @click="modalStore.toggle"
         v-else
         class="text-[#fff] font-extrabold hover:text-[#FF4D42] cursor-pointer"
       >
-        Profile
+        Upload
       </div>
     </div>
     <div class="flex items-center gap-4">
       <div
         @click="onSearchClick"
-        class="h-[32px] w-[32px] bg-gray-600 rounded-full flex items-center justify-center cursor-pointer"
+        class="h-[32px] w-[32px] bg-gray-600 rounded-full flex items-center justify-center cursor-pointer sm-down:hidden"
       >
         <font-awesome-icon :icon="['fas', 'search']" class="text-[#fff]" />
       </div>
@@ -40,7 +40,7 @@
       <button
         @click="userStore.login('davidsmith@gmail.com', 'SuperSecret123')"
         v-if="!userStore.accessToken"
-        class="text-white text-sm py-2 px-6 rounded-3xl bg-[#4636FF] flex gap-2 items-center"
+        class="text-white text-sm py-2 px-6 rounded-3xl bg-[#4636FF] flex gap-2 items-center sm-down:hidden"
       >
         <font-awesome-icon :icon="['fas', 'user']" class="text-white" />
         <div class="font-bold">Demo Account Login</div>

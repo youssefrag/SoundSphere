@@ -5,9 +5,7 @@ export default {
   theme: {
     extend: {
       screens: {
-        // everything ≤1023px → “medium-and-smaller”
         "md-down": { max: "1023px" },
-        // everything ≤767px  → “small-and-smaller”
         "sm-down": { max: "767px" },
       },
     },

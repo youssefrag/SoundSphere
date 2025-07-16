@@ -1,22 +1,22 @@
 <template>
   <div>
     <section
-      class="h-[44rem] bg-[url(@/assets/images/home-bg.jpeg)] bg-cover bg-top md-down:h-[35rem]"
+      class="h-[44rem] bg-[url(@/assets/images/home-bg.jpeg)] bg-cover bg-top md-down:h-[35rem] sm-down:h-[28rem]"
     >
       <section
-        class="h-[100%] bg-[#0E0E0F] opacity-90 text-white flex flex-col items-center py-[8rem] gap-10"
+        class="h-[100%] bg-[#0E0E0F] opacity-90 text-white flex flex-col items-center py-[8rem] gap-10 sm-down:gap-5 sm-down:py-[6rem]"
       >
         <h1
-          class="text-white text-6xl font-bold tracking-wide text-center md-down:text-5xl"
+          class="text-white text-6xl font-bold tracking-wide text-center md-down:text-5xl sm-down:text-2xl"
         >
           WHERE YOUR MUSIC SHAPES THE
         </h1>
         <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-[#4636FF] to-[#0DE27C] text-7xl font-bold tracking-wider mb-10 md-down:text-5xl"
+          class="text-transparent bg-clip-text bg-gradient-to-r from-[#4636FF] to-[#0DE27C] text-7xl font-bold tracking-wider mb-10 md-down:text-5xl sm-down:text-3xl"
           >SPHERE</span
         >
         <div
-          class="w-[824px] h-[84px] bg-gray-400 rounded-full pr-3 pl-10 flex items-center justify-between md-down:w-[600px] md-down:h-[60px]"
+          class="w-[824px] h-[84px] bg-gray-400 rounded-full pr-3 pl-10 flex items-center justify-between md-down:w-[600px] md-down:h-[60px] sm-down:w-[400px] sm-down:h-[40px]"
         >
           <input
             ref="searchInput"
@@ -34,7 +34,7 @@
       class="pb-[200px] bg-[#0E0E0F] py-[6rem]"
     >
       <div
-        class="text-[#fff] text-center text-5xl mb-[4rem] font-semibold md-down:text-4xl"
+        class="text-[#fff] text-center text-5xl mb-[4rem] font-semibold md-down:text-4xl sm-down:text-3xl"
       >
         Trending & Latest Music
       </div>

@@ -35,14 +35,12 @@
   <section
     class="flex flex-col justify-center w-[100%] bg-[#0E0E0F] px-[60px] py-[40px]"
   >
-    <div
-      class="text-3xl font-extrabold text-white mb-[40px] md-down:text-yellow-400 sm-down:text-blue-900"
-    >
+    <div class="text-3xl font-extrabold text-white mb-[40px]">
       Upload Your New Song 🔥
     </div>
     <Form @submit="onSubmit">
       <div
-        class="flex justify-between gap-8 mb-8 md-down:grid md-down:grid-cols-2 md-down:gap-4"
+        class="flex justify-between gap-8 mb-8 md-down:grid md-down:grid-cols-2 md-down:gap-4 sm-down:grid-cols-1"
       >
         <!-- Song Name -->
         <div class="flex flex-col flex-1 gap-2">
@@ -110,7 +108,7 @@
       <button
         type="submit"
         :disabled="!meta.valid || loading"
-        class="self-start text-[#0E0E0F] text-md font-semibold py-3 px-12 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C] disabled:opacity-50"
+        class="self-start text-[#0E0E0F] text-md font-semibold py-3 px-12 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C] disabled:opacity-50 sm-down:w-[100%]"
       >
         <span v-if="loading">Uploading…</span>
         <span v-else>UPLOAD SONG</span>

@@ -60,7 +60,7 @@
             artistName: song.artistName,
           })
         "
-        class="flex justify-center items-center h-[80px] w-[80px] bg-[#0DE27C] rounded-full"
+        class="flex justify-center items-center h-[80px] w-[80px] bg-[#0DE27C] rounded-full sm-down:h-[60px] sm-down:w-[60px]"
       >
         <font-awesome-icon
           :icon="
@@ -68,7 +68,7 @@
               ? ['fas', 'pause']
               : ['fas', 'play']
           "
-          class="text-white text-4xl"
+          class="text-white text-4xl sm-down:text-3xl"
         />
       </div>
     </section>
@@ -88,7 +88,7 @@
         />
         <button
           @click="submitComment"
-          class="mr-[20px] self-end text-[#0E0E0F] text-md font-bold py-2 px-8 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C]"
+          class="mr-[20px] self-end text-[#0E0E0F] text-md font-bold py-2 px-8 rounded-3xl bg-gradient-to-r from-[#98C970] to-[#0DE27C] sm-down:w-full sm-down:mr-0"
         >
           {{ submitting ? "Submitting..." : "SUBMIT COMMENT" }}
         </button>

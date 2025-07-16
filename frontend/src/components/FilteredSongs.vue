@@ -1,5 +1,7 @@
 <template>
-  <div class="grid grid-cols-2 gap-6 px-[100px]">
+  <div
+    class="grid grid-cols-2 gap-6 px-[100px] md-down:grid-cols-1 sm-down:px-[40px]"
+  >
     <div
       v-for="song in musicStore.filteredSongs"
       :key="song.id"
