@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -27,7 +28,6 @@ func main() {
 			log.Fatalf("redis ping failed: %v", err)
 		}
 
-		fmt.Println("Cache is working great 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢")
 		
     server := gin.Default()
 
@@ -43,7 +43,14 @@ func main() {
 
     routes.RegisterRoutes(server)
 
-    server.Run(":8080")
+		port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
+
+    addr := fmt.Sprintf(":%s", port)
+    log.Printf("Starting server on %s\n", addr)
+    server.Run(addr)
 
 }
 
