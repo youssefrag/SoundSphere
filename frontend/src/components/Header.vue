@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="sticky top-0 z-50 h-[100px] bg-[#0E0E0F] w-[100%] flex items-center justify-between px-20 border-b border-gray-100 sm-down:px-[40px]"
+    class="sticky top-0 z-40 h-[100px] bg-[#0E0E0F] w-[100%] flex items-center justify-between px-20 border-b border-gray-100 sm-down:px-[40px]"
   >
     <router-link to="/" class="flex items-center gap-4 md-down:hidden">
       <img alt="logo" src="../assets/Vector.png" />

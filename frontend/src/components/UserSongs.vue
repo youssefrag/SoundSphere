@@ -71,14 +71,15 @@
                 "
               />
             </div>
-            <div
+            <router-link
+              :to="`/song/${song.id}`"
               class="group bg-gray-800 rounded-full h-[36px] w-[36px] flex items-center justify-center hover:bg-white transition-colors duration-200 cursor-pointer"
             >
               <font-awesome-icon
                 :icon="['fas', 'comment']"
                 class="text-[#4636FF]/80 group-hover:text-[#382BCC] transition-colors duration-200"
               />
-            </div>
+            </router-link>
           </div>
         </div>
         <div class="flex flex-col justify-between items-center">

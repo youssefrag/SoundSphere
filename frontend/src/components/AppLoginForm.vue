@@ -1,6 +1,7 @@
 <template>
   <Form :validation-schema="schema" @submit="onSubmit">
     <div class="flex flex-col gap-6">
+      <ErrorAlert :message="errorMsg" @clear="errorMsg = ''" />
       <div>
         <label for="email" class="block mb-2 text-lg font-bold text-[#0E0E0F]"
           >Email</label
@@ -34,23 +35,29 @@
       <button
         type="submit"
         class="text-[#fff] text-lg font-bold py-2 px-8 rounded-xl bg-[#055a32]"
+        :disabled="loading"
       >
-        Login to your account
+        {{ loading ? "Loggin in..." : "Login to your account" }}
       </button>
     </div>
   </Form>
 </template>
 
 <script setup>
-import { Form, Field, ErrorMessage } from "vee-validate";
+import { ref } from "vue";
+import { Form, Field, ErrorMessage, useForm } from "vee-validate";
 import * as yup from "yup";
 import api from "@/api";
+import ErrorAlert from "./ErrorAlert.vue";
 
 import { useModalStore } from "@/stores/modal";
 import { useUserStore } from "@/stores/user";
 
 const modalStore = useModalStore();
 const userStore = useUserStore();
+
+const errorMsg = ref("");
+const loading = ref(false);
 
 const schema = yup.object({
   email: yup
@@ -64,11 +71,17 @@ const schema = yup.object({
 });
 
 const onSubmit = async (values) => {
+  loading.value = true;
   try {
     await userStore.login(values.email, values.password);
     modalStore.close();
   } catch (err) {
+    errorMsg.value = err.response?.data?.message || "Invalid login credentials";
+    email.value = "";
+    password.value = "";
     console.error("API error", err);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
