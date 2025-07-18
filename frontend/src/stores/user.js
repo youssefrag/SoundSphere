@@ -29,11 +29,7 @@ export const useUserStore = defineStore("user", () => {
         await login(userEmail, password);
       }
     } catch (err) {
-      alert(
-        err.response?.status === 409
-          ? "Email already in use"
-          : "Registration failed"
-      );
+      alert("Registration failed");
     }
   }
 
