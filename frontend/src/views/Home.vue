@@ -60,7 +60,11 @@
         />
       </div>
     </section>
-    <section v-else class="pb-[200px] bg-[#0E0E0F] py-[6rem]">
+    <section
+      ref="resultsSection"
+      v-else
+      class="pb-[200px] bg-[#0E0E0F] py-[6rem]"
+    >
       <div class="flex items-center justify-center mb-[4rem] gap-4">
         <div
           class="text-[#fff] text-center text-5xl font-semibold md-down:text-4xl"
@@ -148,5 +152,19 @@ watch(
     }
   },
   { immediate: true }
+);
+
+const resultsSection = ref(null);
+
+watch(
+  () => musicStore.searchTerm,
+  (newTerm, oldTerm) => {
+    // only when the user types *the first* character
+    if (oldTerm === "" && newTerm.length > 0) {
+      nextTick(() => {
+        resultsSection.value?.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+  }
 );
 </script>
