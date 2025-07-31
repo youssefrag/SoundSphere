@@ -156,13 +156,23 @@ watch(
 
 const resultsSection = ref(null);
 
+const ABOVE = 500;
+
 watch(
   () => musicStore.searchTerm,
   (newTerm, oldTerm) => {
-    // only when the user types *the first* character
     if (oldTerm === "" && newTerm.length > 0) {
       nextTick(() => {
-        resultsSection.value?.scrollIntoView({ behavior: "smooth" });
+        const el = resultsSection.value;
+        if (!el) return;
+
+        // get element's position relative to whole page...
+        const topOfEl = el.getBoundingClientRect().top + window.pageYOffset;
+        // …then subtract your offset
+        window.scrollTo({
+          top: topOfEl - ABOVE,
+          behavior: "smooth",
+        });
       });
     }
   }
