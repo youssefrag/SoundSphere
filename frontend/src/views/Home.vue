@@ -60,7 +60,11 @@
         />
       </div>
     </section>
-    <section v-else class="pb-[200px] bg-[#0E0E0F] py-[6rem]">
+    <section
+      ref="resultsSection"
+      v-else
+      class="pb-[200px] bg-[#0E0E0F] py-[6rem]"
+    >
       <div class="flex items-center justify-center mb-[4rem] gap-4">
         <div
           class="text-[#fff] text-center text-5xl font-semibold md-down:text-4xl"
@@ -148,5 +152,29 @@ watch(
     }
   },
   { immediate: true }
+);
+
+const resultsSection = ref(null);
+
+const ABOVE = 500;
+
+watch(
+  () => musicStore.searchTerm,
+  (newTerm, oldTerm) => {
+    if (oldTerm === "" && newTerm.length > 0) {
+      nextTick(() => {
+        const el = resultsSection.value;
+        if (!el) return;
+
+        // get element's position relative to whole page...
+        const topOfEl = el.getBoundingClientRect().top + window.pageYOffset;
+        // …then subtract your offset
+        window.scrollTo({
+          top: topOfEl - ABOVE,
+          behavior: "smooth",
+        });
+      });
+    }
+  }
 );
 </script>
